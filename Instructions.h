@@ -6,6 +6,9 @@
 
 #define CALL      0xba
 // call # of args, address
+#define RETURN    0xb1
+#define DRETURN   0xac
+// returns data
 
 #define FLOAD_0   0x22
 #define FLOAD_1   0x23
@@ -18,6 +21,8 @@
 #define IMUL      0x68
 #define IDIV      0x6c
 #define INEG      0x74
+
+#define SWAP      0x5f
 
 #define ICONST_M1 0x02
 #define ICONST_0  0x03

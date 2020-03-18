@@ -1,4 +1,6 @@
 #include <iostream>
+#include <vector>
+#include <stack>
 #include "VirtualMachine.h"
 #include "Instructions.h"
 
@@ -6,6 +8,7 @@ VirtualMachine::VirtualMachine(unsigned char *pc) {
     this->PC = pc;
     this->PC0 = pc;
     this->operandStackPtr = operandStack;
+    this->operandStackBasePtr = operandStack + 1;
 }
 
 void VirtualMachine::execute() {
@@ -18,10 +21,46 @@ void VirtualMachine::execute() {
             exit(0);
             break;
         }
+        case SWAP: {
+            int index1 = nextByte();
+            int index2 = nextByte();
+            StackData temp = operandStackBasePtr[index1];
+            operandStackBasePtr[index1] = operandStackBasePtr[index2];
+            operandStackBasePtr[index2] = temp;
+            break;
+        }
         case CALL: {
             int numArgs = nextByte();
             auto *address = (unsigned char *) ((unsigned long long) PC0 + nextInt());
-            
+            std::stack<StackData> args;
+            for (int i = 0; i < numArgs; i++) {
+                args.push(operandPop());
+            }
+            // push the original base pointer, then the return address onto the operand stack, then the args
+            operandPush(StackData((int) operandStackBasePtr));
+            operandPush(StackData((int) PC));
+            operandStackBasePtr = operandStackPtr + 1;
+
+            for (int i = 0; i < numArgs; i++) {
+                operandPush(args.top());
+                args.pop();
+            }
+            PC = address;
+            break;
+        }
+        case RETURN: {
+            operandStackPtr = operandStackBasePtr - 1;
+            PC = (unsigned char *) operandPop().asInt;
+            operandStackBasePtr = (StackData *) operandPop().asInt;
+            break;
+        }
+        case DRETURN: {
+            StackData ret = operandPop();
+            operandStackPtr = operandStackBasePtr - 1;
+            PC = (unsigned char *) operandPop().asInt;
+            operandStackBasePtr = (StackData *) operandPop().asInt;
+            operandPush(ret);
+            break;
         }
         case GOTO: {
             int offset = nextInt();
@@ -42,7 +81,7 @@ void VirtualMachine::execute() {
             break;
         }
         case ISUB: {
-            operandPush(StackData(operandPop().asInt - operandPop().asInt));
+            operandPush(StackData(-operandPop().asInt + operandPop().asInt));
             break;
         }
         case IMUL: {
