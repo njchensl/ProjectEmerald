@@ -4,7 +4,6 @@
 #include "OperandStackData.h"
 #include "VirtualMachine.h"
 
-
 int main(int argc, char **argv) {
     std::string fIn = argv[1];
     //std::cout << fIn << std::endl;

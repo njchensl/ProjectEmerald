@@ -95,6 +95,8 @@ void VirtualMachine::execute() {
                 args.push(operandPop());
             }
             // push the original base pointer, then the return address onto the operand stack, then the args
+            // TODO compressed pointers, instead of saving the data as a pointer, save it as a memory offset, so that
+            // the total amount of addressable memory remains 4 GB.
             operandPush(StackData((int) operandStackBasePtr));
             operandPush(StackData((int) PC));
             operandStackBasePtr = operandStackPtr + 1;
@@ -148,6 +150,10 @@ void VirtualMachine::execute() {
             operandPush(StackData(-operandPop().asInt));
             break;
         }
+        case ILDC: {
+            operandPush(StackData(nextInt()));
+            break;
+        }
         case ICONST_M1: {
             operandPush(StackData(-1));
             break;
@@ -199,11 +205,14 @@ StackData VirtualMachine::operandPop() {
     return *(operandStackPtr--);
 }
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "hicpp-signed-bitwise"
 int VirtualMachine::nextInt() {
     return int(nextByte() |
                nextByte() << 8 |
                nextByte() << 16 |
                nextByte() << 24);
 }
+#pragma clang diagnostic pop
 
 VirtualMachine::~VirtualMachine() = default;

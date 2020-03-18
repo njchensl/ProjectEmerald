@@ -35,6 +35,7 @@
 #define IDIV      0x6c
 #define INEG      0x74
 
+#define ILDC      0x12
 #define ICONST_M1 0x02
 #define ICONST_0  0x03
 #define ICONST_1  0x04
