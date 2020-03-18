@@ -29,6 +29,64 @@ void VirtualMachine::execute() {
             operandStackBasePtr[index2] = temp;
             break;
         }
+        case DUP: {
+            operandPush(operandPeek());
+            break;
+        }
+        case GOTO: {
+            int offset = nextInt();
+            //std::cout << offset << std::endl;
+            PC = (unsigned char *) ((unsigned long long) PC0 + offset);
+            break;
+        }
+        case IFEQ: {
+            StackData d = operandPop();
+            int offset = nextInt();
+            if (d.asInt == 0) {
+                PC = (unsigned char *) ((unsigned long long) PC0 + offset);
+            }
+            break;
+        }
+        case IFGE: {
+            StackData d = operandPop();
+            int offset = nextInt();
+            if (d.asInt >= 0) {
+                PC = (unsigned char *) ((unsigned long long) PC0 + offset);
+            }
+            break;
+        }
+        case IFGT: {
+            StackData d = operandPop();
+            int offset = nextInt();
+            if (d.asInt > 0) {
+                PC = (unsigned char *) ((unsigned long long) PC0 + offset);
+            }
+            break;
+        }
+        case IFLE: {
+            StackData d = operandPop();
+            int offset = nextInt();
+            if (d.asInt <= 0) {
+                PC = (unsigned char *) ((unsigned long long) PC0 + offset);
+            }
+            break;
+        }
+        case IFLT: {
+            StackData d = operandPop();
+            int offset = nextInt();
+            if (d.asInt < 0) {
+                PC = (unsigned char *) ((unsigned long long) PC0 + offset);
+            }
+            break;
+        }
+        case IFNE: {
+            StackData d = operandPop();
+            int offset = nextInt();
+            if (d.asInt != 0 || d.asFloat != 0) {
+                PC = (unsigned char *) ((unsigned long long) PC0 + offset);
+            }
+            break;
+        }
         case CALL: {
             int numArgs = nextByte();
             auto *address = (unsigned char *) ((unsigned long long) PC0 + nextInt());
@@ -60,12 +118,6 @@ void VirtualMachine::execute() {
             PC = (unsigned char *) operandPop().asInt;
             operandStackBasePtr = (StackData *) operandPop().asInt;
             operandPush(ret);
-            break;
-        }
-        case GOTO: {
-            int offset = nextInt();
-            //std::cout << offset << std::endl;
-            PC = (unsigned char *) ((unsigned long long) PC0 + offset);
             break;
         }
         case I2F: {
@@ -125,6 +177,7 @@ void VirtualMachine::execute() {
             break;
         }
         default: {
+            throw UnknownInstructionError();
             break;
         }
     }

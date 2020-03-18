@@ -2,13 +2,6 @@
 <project version="4">
   <component name="PublishConfigData">
     <serverData>
-      <paths name="Remote Host (7c317123-bb60-4f93-8ca2-25c58adb4463)">
-        <serverdata>
-          <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
       <paths name="WSL (ab436ce7-b21f-42c7-9e3c-bfd8c11ae082)">
         <serverdata>
           <mappings>
