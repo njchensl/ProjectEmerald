@@ -135,7 +135,9 @@ void VirtualMachine::execute() {
             break;
         }
         case ISUB: {
-            operandPush(StackData(-operandPop().asInt + operandPop().asInt));
+            long long b = operandPop().asInt;
+            long long a = operandPop().asInt;
+            operandPush(StackData(a - b));
             break;
         }
         case IMUL: {
