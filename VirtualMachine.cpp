@@ -14,29 +14,62 @@ VirtualMachine::VirtualMachine(unsigned char *pc) {
 void VirtualMachine::execute() {
     unsigned char instruction = nextByte();
     switch (instruction) {
-        case HALT: {
-            while (operandStackPtr > operandStack) {
-                std::cout << operandPeek().asInt << "\t" << operandPop().asFloat << std::endl;
-            }
-            exit(0);
+        case IADD: {
+            operandPush(StackData(operandPop().asInt + operandPop().asInt));
             break;
         }
-        case SWAP: {
-            int index1 = nextByte();
-            int index2 = nextByte();
-            StackData temp = operandStackBasePtr[index1];
-            operandStackBasePtr[index1] = operandStackBasePtr[index2];
-            operandStackBasePtr[index2] = temp;
+        case ISUB: {
+            long long b = operandPop().asInt;
+            long long a = operandPop().asInt;
+            operandPush(StackData(a - b));
+            break;
+        }
+        case IMUL: {
+            operandPush(StackData(operandPop().asInt * operandPop().asInt));
+            break;
+        }
+        case IDIV: {
+            operandPush(StackData(operandPop().asInt / operandPop().asInt));
+            break;
+        }
+        case INEG: {
+            operandPush(StackData(-operandPop().asInt));
+            break;
+        }
+        case ICONST_M1: {
+            operandPush(StackData(-1LL));
+            break;
+        }
+        case ICONST_0: {
+            operandPush(StackData(0LL));
+            break;
+        }
+        case ICONST_1: {
+            operandPush(StackData(1LL));
+            break;
+        }
+        case ICONST_2: {
+            operandPush(StackData(2LL));
+            break;
+        }
+        case ICONST_3: {
+            operandPush(StackData(3LL));
+            break;
+        }
+        case ICONST_4: {
+            operandPush(StackData(4LL));
+            break;
+        }
+        case ICONST_5: {
+            operandPush(StackData(5LL));
+            break;
+        }
+        case ILDC: {
+            operandPush(StackData(nextInt()));
             break;
         }
         case DUP: {
             operandPush(operandPeek());
-            break;
-        }
-        case GOTO: {
-            long long offset = nextInt();
-            //std::cout << offset << std::endl;
-            PC = (unsigned char *) ((unsigned long long) PC0 + offset);
             break;
         }
         case IFEQ: {
@@ -122,6 +155,12 @@ void VirtualMachine::execute() {
             operandPush(ret);
             break;
         }
+        case GOTO: {
+            long long offset = nextInt();
+            //std::cout << offset << std::endl;
+            PC = (unsigned char *) ((unsigned long long) PC0 + offset);
+            break;
+        }
         case I2F: {
             operandPush(StackData((double) operandPop().asInt));
             break;
@@ -130,58 +169,19 @@ void VirtualMachine::execute() {
             operandPush(StackData((long long) operandPop().asFloat));
             break;
         }
-        case IADD: {
-            operandPush(StackData(operandPop().asInt + operandPop().asInt));
+        case SWAP: {
+            int index1 = nextByte();
+            int index2 = nextByte();
+            StackData temp = operandStackBasePtr[index1];
+            operandStackBasePtr[index1] = operandStackBasePtr[index2];
+            operandStackBasePtr[index2] = temp;
             break;
         }
-        case ISUB: {
-            long long b = operandPop().asInt;
-            long long a = operandPop().asInt;
-            operandPush(StackData(a - b));
-            break;
-        }
-        case IMUL: {
-            operandPush(StackData(operandPop().asInt * operandPop().asInt));
-            break;
-        }
-        case IDIV: {
-            operandPush(StackData(operandPop().asInt / operandPop().asInt));
-            break;
-        }
-        case INEG: {
-            operandPush(StackData(-operandPop().asInt));
-            break;
-        }
-        case ILDC: {
-            operandPush(StackData(nextInt()));
-            break;
-        }
-        case ICONST_M1: {
-            operandPush(StackData(-1LL));
-            break;
-        }
-        case ICONST_0: {
-            operandPush(StackData(0LL));
-            break;
-        }
-        case ICONST_1: {
-            operandPush(StackData(1LL));
-            break;
-        }
-        case ICONST_2: {
-            operandPush(StackData(2LL));
-            break;
-        }
-        case ICONST_3: {
-            operandPush(StackData(3LL));
-            break;
-        }
-        case ICONST_4: {
-            operandPush(StackData(4LL));
-            break;
-        }
-        case ICONST_5: {
-            operandPush(StackData(5LL));
+        case HALT: {
+            while (operandStackPtr > operandStack) {
+                std::cout << operandPeek().asInt << "\t" << operandPop().asFloat << std::endl;
+            }
+            exit(0);
             break;
         }
         default: {

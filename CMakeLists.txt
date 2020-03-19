@@ -3,6 +3,6 @@ project(Interpreter)
 
 set(CMAKE_CXX_STANDARD 20)
 
-set(CMAKE_CXX_FLAGS "-O3")
+set(CMAKE_CXX_FLAGS "-Ofast -march=native")
 
-add_executable(Interpreter main.cpp VirtualMachine.cpp VirtualMachine.h OperandStackData.h OperandStackData.cpp Instructions.h)
+add_executable(Interpreter main.cpp VirtualMachine.cpp OperandStackData.cpp)
