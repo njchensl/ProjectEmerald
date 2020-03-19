@@ -2,11 +2,11 @@
 #pragma ide diagnostic ignored "cppcoreguidelines-pro-type-member-init"
 #include "OperandStackData.h"
 
-StackData::StackData(int i) {
+StackData::StackData(long long i) {
     asInt = i;
 }
 
-StackData::StackData(float f) {
+StackData::StackData(double f) {
     asFloat = f;
 }
 

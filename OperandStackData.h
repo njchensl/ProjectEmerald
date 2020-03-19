@@ -3,12 +3,12 @@
 struct StackData {
     explicit StackData();
 
-    explicit StackData(int);
+    explicit StackData(long long);
 
-    explicit StackData(float);
+    explicit StackData(double);
 
     union {
-        int asInt;
-        float asFloat;
+        long long asInt;
+        double asFloat;
     };
 };

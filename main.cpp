@@ -5,6 +5,8 @@
 #include "VirtualMachine.h"
 
 int main(int argc, char **argv) {
+    char array[] = "";
+    array[0] = '\0';
     std::string fIn = argv[1];
     //std::cout << fIn << std::endl;
     std::ifstream input(fIn, std::ios::binary);
@@ -19,5 +21,5 @@ int main(int argc, char **argv) {
         vm.execute();
     }
 #pragma clang diagnostic pop
-    return 0;
+    return 1;
 }

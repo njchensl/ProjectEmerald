@@ -34,14 +34,14 @@ void VirtualMachine::execute() {
             break;
         }
         case GOTO: {
-            int offset = nextInt();
+            long long offset = nextInt();
             //std::cout << offset << std::endl;
             PC = (unsigned char *) ((unsigned long long) PC0 + offset);
             break;
         }
         case IFEQ: {
             StackData d = operandPop();
-            int offset = nextInt();
+            long long offset = nextInt();
             if (d.asInt == 0) {
                 PC = (unsigned char *) ((unsigned long long) PC0 + offset);
             }
@@ -49,7 +49,7 @@ void VirtualMachine::execute() {
         }
         case IFGE: {
             StackData d = operandPop();
-            int offset = nextInt();
+            long long offset = nextInt();
             if (d.asInt >= 0) {
                 PC = (unsigned char *) ((unsigned long long) PC0 + offset);
             }
@@ -57,7 +57,7 @@ void VirtualMachine::execute() {
         }
         case IFGT: {
             StackData d = operandPop();
-            int offset = nextInt();
+            long long offset = nextInt();
             if (d.asInt > 0) {
                 PC = (unsigned char *) ((unsigned long long) PC0 + offset);
             }
@@ -65,7 +65,7 @@ void VirtualMachine::execute() {
         }
         case IFLE: {
             StackData d = operandPop();
-            int offset = nextInt();
+            long long offset = nextInt();
             if (d.asInt <= 0) {
                 PC = (unsigned char *) ((unsigned long long) PC0 + offset);
             }
@@ -73,7 +73,7 @@ void VirtualMachine::execute() {
         }
         case IFLT: {
             StackData d = operandPop();
-            int offset = nextInt();
+            long long offset = nextInt();
             if (d.asInt < 0) {
                 PC = (unsigned char *) ((unsigned long long) PC0 + offset);
             }
@@ -81,7 +81,7 @@ void VirtualMachine::execute() {
         }
         case IFNE: {
             StackData d = operandPop();
-            int offset = nextInt();
+            long long offset = nextInt();
             if (d.asInt != 0 || d.asFloat != 0) {
                 PC = (unsigned char *) ((unsigned long long) PC0 + offset);
             }
@@ -97,8 +97,8 @@ void VirtualMachine::execute() {
             // push the original base pointer, then the return address onto the operand stack, then the args
             // TODO compressed pointers, instead of saving the data as a pointer, save it as a memory offset, so that
             // the total amount of addressable memory remains 4 GB.
-            operandPush(StackData((int) operandStackBasePtr));
-            operandPush(StackData((int) PC));
+            operandPush(StackData((long long) operandStackBasePtr));
+            operandPush(StackData((long long) PC));
             operandStackBasePtr = operandStackPtr + 1;
 
             for (int i = 0; i < numArgs; i++) {
@@ -110,24 +110,24 @@ void VirtualMachine::execute() {
         }
         case RETURN: {
             operandStackPtr = operandStackBasePtr - 1;
-            PC = (unsigned char *) operandPop().asInt;
-            operandStackBasePtr = (StackData *) operandPop().asInt;
+            PC = reinterpret_cast<unsigned char *>(operandPop().asInt);
+            operandStackBasePtr = reinterpret_cast<StackData *>(operandPop().asInt);
             break;
         }
         case DRETURN: {
             StackData ret = operandPop();
             operandStackPtr = operandStackBasePtr - 1;
-            PC = (unsigned char *) operandPop().asInt;
-            operandStackBasePtr = (StackData *) operandPop().asInt;
+            PC = reinterpret_cast<unsigned char *>(operandPop().asInt);
+            operandStackBasePtr = reinterpret_cast<StackData *>(operandPop().asInt);
             operandPush(ret);
             break;
         }
         case I2F: {
-            operandPush(StackData((float) operandPop().asInt));
+            operandPush(StackData((double) operandPop().asInt));
             break;
         }
         case F2I: {
-            operandPush(StackData((int) operandPop().asFloat));
+            operandPush(StackData((long long) operandPop().asFloat));
             break;
         }
         case IADD: {
@@ -155,31 +155,31 @@ void VirtualMachine::execute() {
             break;
         }
         case ICONST_M1: {
-            operandPush(StackData(-1));
+            operandPush(StackData(-1LL));
             break;
         }
         case ICONST_0: {
-            operandPush(StackData(0));
+            operandPush(StackData(0LL));
             break;
         }
         case ICONST_1: {
-            operandPush(StackData(1));
+            operandPush(StackData(1LL));
             break;
         }
         case ICONST_2: {
-            operandPush(StackData(2));
+            operandPush(StackData(2LL));
             break;
         }
         case ICONST_3: {
-            operandPush(StackData(3));
+            operandPush(StackData(3LL));
             break;
         }
         case ICONST_4: {
-            operandPush(StackData(4));
+            operandPush(StackData(4LL));
             break;
         }
         case ICONST_5: {
-            operandPush(StackData(5));
+            operandPush(StackData(5LL));
             break;
         }
         default: {
@@ -197,7 +197,7 @@ StackData VirtualMachine::operandPeek() {
     return *operandStackPtr;
 }
 
-void VirtualMachine::operandPush(StackData sd) {
+void VirtualMachine::operandPush(const StackData &sd) {
     *(++operandStackPtr) = sd;
 }
 
@@ -207,12 +207,18 @@ StackData VirtualMachine::operandPop() {
 
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "hicpp-signed-bitwise"
-int VirtualMachine::nextInt() {
-    return int(nextByte() |
-               nextByte() << 8 |
-               nextByte() << 16 |
-               nextByte() << 24);
+
+long long VirtualMachine::nextInt() {
+    return int64_t((long long) nextByte() |
+                   (long long) nextByte() << 8 |
+                   (long long) nextByte() << 16 |
+                   (long long) nextByte() << 24 |
+                   (long long) nextByte() << 32 |
+                   (long long) nextByte() << 40 |
+                   (long long) nextByte() << 48 |
+                   (long long) nextByte() << 56);
 }
+
 #pragma clang diagnostic pop
 
 VirtualMachine::~VirtualMachine() = default;

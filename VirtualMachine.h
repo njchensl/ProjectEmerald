@@ -25,11 +25,11 @@ private:
 
     inline unsigned char nextByte();
 
-    inline int nextInt();
+    inline long long nextInt();
 
     inline StackData operandPeek();
 
-    inline void operandPush(StackData sd);
+    inline void operandPush(const StackData &sd);
 
     inline StackData operandPop();
 
