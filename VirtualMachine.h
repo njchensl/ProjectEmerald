@@ -19,6 +19,7 @@ class VirtualMachine final : public IVirtualMachine {
 private:
     unsigned char *PC;
     const unsigned char *PC0;
+    const unsigned char *data0;
     StackData *operandStackBasePtr;
     StackData *operandStackPtr;
     StackData operandStack[1024];

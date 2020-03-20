@@ -4,9 +4,13 @@
 #include "VirtualMachine.h"
 #include "Instructions.h"
 
-VirtualMachine::VirtualMachine(unsigned char *pc) {
-    this->PC = pc;
-    this->PC0 = pc;
+VirtualMachine::VirtualMachine(unsigned char *p0) {
+    this->PC = p0;
+    unsigned long long codeOffset = nextInt();
+    unsigned long long dataOffset = nextInt();
+    this->PC = codeOffset + p0;
+    this->PC0 = this->PC;
+    this->data0 = p0 + dataOffset;
     this->operandStackPtr = operandStack;
     this->operandStackBasePtr = operandStack + 1;
 }
