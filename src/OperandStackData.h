@@ -8,7 +8,7 @@ struct StackData {
     explicit StackData(double);
 
     union {
-        long long asInt;
-        double asFloat;
+        long long AsInt;
+        double AsFloat;
     };
 };
