@@ -128,14 +128,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Instructions.h" />
-    <ClInclude Include="src\OperandStackData.h" />
-    <ClInclude Include="src\VirtualMachine.h" />
+    <ClInclude Include="src\Emerald\Core.h" />
+    <ClInclude Include="src\Emerald\Instructions.h" />
+    <ClInclude Include="src\Emerald\OperandStackData.h" />
+    <ClInclude Include="src\Emerald\VirtualMachine.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\OperandStackData.cpp" />
-    <ClCompile Include="src\VirtualMachine.cpp" />
-    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Emerald\OperandStackData.cpp" />
+    <ClCompile Include="src\Emerald\VirtualMachine.cpp" />
+    <ClCompile Include="src\Emerald\main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

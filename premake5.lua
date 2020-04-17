@@ -34,6 +34,9 @@ project "Runtime"
     includedirs
     {
     }
+    debugargs {
+        "C:\\Users\\njche\\Desktop\\Test.exec"
+    }
 
     filter "system:windows"
         systemversion "latest"
