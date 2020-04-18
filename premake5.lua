@@ -35,7 +35,7 @@ project "Runtime"
     {
     }
     debugargs {
-        "C:\\Users\\njche\\Desktop\\Test.exec"
+        "-d", "C:\\Users\\njche\\Desktop\\Test.exec"
     }
 
     filter "system:windows"

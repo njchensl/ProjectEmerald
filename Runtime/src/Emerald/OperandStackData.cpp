@@ -1,13 +1,17 @@
 #include "OperandStackData.h"
 
-StackData::StackData(long long i) {
-    AsInt = i;
-}
+namespace Emerald
+{
+    StackData::StackData(long long i) {
+        AsInt = i;
+    }
 
-StackData::StackData(double f) {
-    AsFloat = f;
-}
+    StackData::StackData(double f) {
+        AsFloat = f;
+    }
 
-StackData::StackData() {
-    AsInt = 0;
+    StackData::StackData() {
+        AsInt = 0;
+    }
+
 }

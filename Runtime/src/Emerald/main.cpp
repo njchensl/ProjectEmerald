@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "Core.h"
+#include "Disassembler.h"
 #include "VirtualMachine.h"
 
 enum class ExecutionMode
@@ -14,6 +15,8 @@ enum class ExecutionMode
 
 int main(int argc, char** argv)
 {
+    using namespace Emerald;
+
     EM_CORE_ASSERT(argc >= 2, "Argument count must be greater than or equal to 2!");
     if (argc == 1)
     {
@@ -67,8 +70,12 @@ int main(int argc, char** argv)
     }
     case ExecutionMode::Disassembly:
     {
-        // TODO : later
-        break;
+        Disassembler disassembler(code, buffer.size());
+        for (;;)
+        {
+            disassembler.Execute();
+        }
+        return 1;
     }
     case ExecutionMode::None:
     {

@@ -1,14 +1,18 @@
 #pragma once
 
-struct StackData {
-    explicit StackData();
+namespace Emerald
+{
+    struct StackData {
+        explicit StackData();
 
-    explicit StackData(long long);
+        explicit StackData(long long);
 
-    explicit StackData(double);
+        explicit StackData(double);
 
-    union {
-        long long AsInt;
-        double AsFloat;
+        union {
+            long long AsInt;
+            double AsFloat;
+        };
     };
-};
+}
+

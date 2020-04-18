@@ -4,23 +4,24 @@
 #include "VirtualMachine.h"
 #include "Instructions.h"
 
-VirtualMachine::VirtualMachine(unsigned char* p0)
+namespace Emerald
 {
-    this->m_PC = p0;
-    unsigned long long codeOffset = NextInt();
-    unsigned long long dataOffset = NextInt();
-    this->m_PC = codeOffset + p0;
-    this->m_PC0 = this->m_PC;
-    this->m_Data0 = p0 + dataOffset;
-    this->m_OperandStackPtr = m_OperandStack;
-    this->m_OperandStackBasePtr = m_OperandStack + 1;
-}
-
-void VirtualMachine::Execute()
-{
-    unsigned char instruction = NextByte();
-    switch (instruction)
+    VirtualMachine::VirtualMachine(unsigned char* p0) : m_PC(p0)
     {
+        unsigned long long codeOffset = NextInt();
+        unsigned long long dataOffset = NextInt();
+        m_PC = codeOffset + p0;
+        m_PC0 = m_PC;
+        m_Data0 = p0 + dataOffset;
+        m_OperandStackPtr = m_OperandStack;
+        m_OperandStackBasePtr = m_OperandStack + 1;
+    }
+
+    void VirtualMachine::Execute()
+    {
+        unsigned char instruction = NextByte();
+        switch (instruction)
+        {
         case IADD:
         {
             OperandPush(StackData(OperandPop().AsInt + OperandPop().AsInt));
@@ -99,7 +100,7 @@ void VirtualMachine::Execute()
             long long offset = NextInt();
             if (d.AsInt == 0)
             {
-                m_PC = (unsigned char*) ((unsigned long long) m_PC0 + offset);
+                m_PC = (unsigned char*)((unsigned long long)m_PC0 + offset);
             }
             break;
         }
@@ -109,7 +110,7 @@ void VirtualMachine::Execute()
             long long offset = NextInt();
             if (d.AsInt >= 0)
             {
-                m_PC = (unsigned char*) ((unsigned long long) m_PC0 + offset);
+                m_PC = (unsigned char*)((unsigned long long)m_PC0 + offset);
             }
             break;
         }
@@ -119,7 +120,7 @@ void VirtualMachine::Execute()
             long long offset = NextInt();
             if (d.AsInt > 0)
             {
-                m_PC = (unsigned char*) ((unsigned long long) m_PC0 + offset);
+                m_PC = (unsigned char*)((unsigned long long)m_PC0 + offset);
             }
             break;
         }
@@ -129,7 +130,7 @@ void VirtualMachine::Execute()
             long long offset = NextInt();
             if (d.AsInt <= 0)
             {
-                m_PC = (unsigned char*) ((unsigned long long) m_PC0 + offset);
+                m_PC = (unsigned char*)((unsigned long long)m_PC0 + offset);
             }
             break;
         }
@@ -139,7 +140,7 @@ void VirtualMachine::Execute()
             long long offset = NextInt();
             if (d.AsInt < 0)
             {
-                m_PC = (unsigned char*) ((unsigned long long) m_PC0 + offset);
+                m_PC = (unsigned char*)((unsigned long long)m_PC0 + offset);
             }
             break;
         }
@@ -149,14 +150,14 @@ void VirtualMachine::Execute()
             long long offset = NextInt();
             if (d.AsInt != 0 || d.AsFloat != 0)
             {
-                m_PC = (unsigned char*) ((unsigned long long) m_PC0 + offset);
+                m_PC = (unsigned char*)((unsigned long long)m_PC0 + offset);
             }
             break;
         }
         case CALL:
         {
             int numArgs = NextByte();
-            auto* address = (unsigned char*) ((unsigned long long) m_PC0 + NextInt());
+            auto* address = (unsigned char*)((unsigned long long)m_PC0 + NextInt());
             std::stack<StackData> args;
             for (int i = 0; i < numArgs; i++)
             {
@@ -165,8 +166,8 @@ void VirtualMachine::Execute()
             // push the original base pointer, then the return address onto the operand stack, then the args
             // TODO compressed pointers, instead of saving the data as a pointer, save it as a memory offset, so that
             // the total amount of addressable memory remains 4 GB.
-            OperandPush(StackData((long long) m_OperandStackBasePtr));
-            OperandPush(StackData((long long) m_PC));
+            OperandPush(StackData((long long)m_OperandStackBasePtr));
+            OperandPush(StackData((long long)m_PC));
             m_OperandStackBasePtr = m_OperandStackPtr + 1;
 
             for (int i = 0; i < numArgs; i++)
@@ -197,17 +198,17 @@ void VirtualMachine::Execute()
         {
             long long offset = NextInt();
             //std::cout << offset << std::endl;
-            m_PC = (unsigned char*) ((unsigned long long) m_PC0 + offset);
+            m_PC = (unsigned char*)((unsigned long long)m_PC0 + offset);
             break;
         }
         case I2F:
         {
-            OperandPush(StackData((double) OperandPop().AsInt));
+            OperandPush(StackData((double)OperandPop().AsInt));
             break;
         }
         case F2I:
         {
-            OperandPush(StackData((long long) OperandPop().AsFloat));
+            OperandPush(StackData((long long)OperandPop().AsFloat));
             break;
         }
         case SWAP:
@@ -233,44 +234,40 @@ void VirtualMachine::Execute()
             throw UnknownInstructionError();
             break;
         }
+        }
     }
+
+    inline unsigned char VirtualMachine::NextByte()
+    {
+        return *(m_PC++);
+    }
+
+    StackData VirtualMachine::OperandPeek()
+    {
+        return *m_OperandStackPtr;
+    }
+
+    void VirtualMachine::OperandPush(const StackData& sd)
+    {
+        *(++m_OperandStackPtr) = sd;
+    }
+
+    StackData VirtualMachine::OperandPop()
+    {
+        return *(m_OperandStackPtr--);
+    }
+
+    long long VirtualMachine::NextInt()
+    {
+        return int64_t((long long)NextByte() |
+            (long long)NextByte() << 8 |
+            (long long)NextByte() << 16 |
+            (long long)NextByte() << 24 |
+            (long long)NextByte() << 32 |
+            (long long)NextByte() << 40 |
+            (long long)NextByte() << 48 |
+            (long long)NextByte() << 56);
+    }
+
+    VirtualMachine::~VirtualMachine() = default;
 }
-
-inline unsigned char VirtualMachine::NextByte()
-{
-    return *(m_PC++);
-}
-
-StackData VirtualMachine::OperandPeek()
-{
-    return *m_OperandStackPtr;
-}
-
-void VirtualMachine::OperandPush(const StackData& sd)
-{
-    *(++m_OperandStackPtr) = sd;
-}
-
-StackData VirtualMachine::OperandPop()
-{
-    return *(m_OperandStackPtr--);
-}
-
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "hicpp-signed-bitwise"
-
-long long VirtualMachine::NextInt()
-{
-    return int64_t((long long) NextByte() |
-                   (long long) NextByte() << 8 |
-                   (long long) NextByte() << 16 |
-                   (long long) NextByte() << 24 |
-                   (long long) NextByte() << 32 |
-                   (long long) NextByte() << 40 |
-                   (long long) NextByte() << 48 |
-                   (long long) NextByte() << 56);
-}
-
-#pragma clang diagnostic pop
-
-VirtualMachine::~VirtualMachine() = default;
