@@ -8,13 +8,12 @@
 
 namespace Emerald
 {
-    Disassembler::Disassembler(unsigned char* code, unsigned long long size) : m_PC(code), m_Size(size)
+    Disassembler::Disassembler(unsigned char* code, unsigned long long size) : m_PC(code), m_PC0(code), m_Size(size)
     {
         // read code segment and data segment offsets
         unsigned long long codeOffset = NextInt();
         unsigned long long dataOffset = NextInt();
         m_PC = codeOffset + code;
-        m_PC0 = m_PC;
         m_Data0 = code + dataOffset;
 
         std::cout << "Code offset: 0x" << std::hex << codeOffset << std::endl;

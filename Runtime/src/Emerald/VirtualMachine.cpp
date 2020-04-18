@@ -6,12 +6,11 @@
 
 namespace Emerald
 {
-    VirtualMachine::VirtualMachine(unsigned char* p0) : m_PC(p0)
+    VirtualMachine::VirtualMachine(unsigned char* p0) : m_PC(p0), m_PC0(p0)
     {
         unsigned long long codeOffset = NextInt();
         unsigned long long dataOffset = NextInt();
         m_PC = codeOffset + p0;
-        m_PC0 = m_PC;
         m_Data0 = p0 + dataOffset;
         m_OperandStackPtr = m_OperandStack;
         m_OperandStackBasePtr = m_OperandStack + 1;

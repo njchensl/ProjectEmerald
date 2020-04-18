@@ -5,6 +5,7 @@ workspace "ProjectEmerald"
     configurations
     {
         "Debug",
+        "Debug-Disassembly",
         "Release",
         "Dist"
     }
@@ -34,9 +35,6 @@ project "Runtime"
     includedirs
     {
     }
-    debugargs {
-        "-d", "C:\\Users\\njche\\Desktop\\Test.exec"
-    }
 
     filter "system:windows"
         systemversion "latest"
@@ -45,13 +43,30 @@ project "Runtime"
         defines "EM_DEBUG"
         runtime "Debug"
         symbols "on"
+        debugargs {
+            "C:\\Users\\njche\\Desktop\\Test.exec"
+        }
+
+    filter "configurations:Debug-Disassembly"
+        defines "EM_DEBUG"
+        runtime "Debug"
+        symbols "on"
+        debugargs {
+            "-d", "C:\\Users\\njche\\Desktop\\Test.exec"
+        }
 
     filter "configurations:Release"
         defines "EM_RELEASE"
         runtime "Release"
         optimize "on"
+        debugargs {
+            "C:\\Users\\njche\\Desktop\\Test.exec"
+        }
 
     filter "configurations:Dist"
         defines "EM_DIST"
         runtime "Release"
         optimize "on"
+        debugargs {
+            "C:\\Users\\njche\\Desktop\\Test.exec"
+        }
