@@ -2,16 +2,20 @@
 
 namespace Emerald
 {
-    struct StackData {
-        explicit StackData();
+    struct DataUnit {
+        explicit DataUnit();
 
-        explicit StackData(long long);
+        explicit DataUnit(long long);
 
-        explicit StackData(double);
+        explicit DataUnit(double);
+
+        explicit DataUnit(void* ptr);
 
         union {
             long long AsInt;
+            unsigned long long AsUnsignedInt;
             double AsFloat;
+            void* AsPointer;
         };
     };
 }

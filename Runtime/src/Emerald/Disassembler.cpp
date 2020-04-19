@@ -22,7 +22,7 @@ namespace Emerald
 
     void Disassembler::Execute()
     {
-        if (m_PC > m_PC0 + m_Size)
+        if (m_PC >= m_PC0 + m_Size)
         {
             exit(0);
         }
@@ -144,6 +144,21 @@ namespace Emerald
             ss << "ifne 0x" << std::hex;
             long long offset = NextInt();
             ss << offset;
+            break;
+        }
+        case PTR_ACCESS:
+        {
+            ss << "ptr_access";
+            break;
+        }
+        case PTR_STORE:
+        {
+            ss << "ptr_store";
+            break;
+        }
+        case PTR_STACK:
+        {
+            ss << "ptr_stack";
             break;
         }
         case CALL:

@@ -2,15 +2,20 @@
 
 namespace Emerald
 {
-    StackData::StackData(long long i) {
+    DataUnit::DataUnit(long long i) {
         AsInt = i;
     }
 
-    StackData::StackData(double f) {
+    DataUnit::DataUnit(double f) {
         AsFloat = f;
     }
 
-    StackData::StackData() {
+    DataUnit::DataUnit(void* ptr)
+    {
+        AsPointer = ptr;
+    }
+
+    DataUnit::DataUnit() {
         AsInt = 0;
     }
 

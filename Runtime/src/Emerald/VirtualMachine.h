@@ -21,19 +21,19 @@ namespace Emerald
         unsigned char* m_PC;
         const unsigned char* m_PC0;
         const unsigned char* m_Data0;
-        StackData* m_OperandStackBasePtr;
-        StackData* m_OperandStackPtr;
-        StackData m_OperandStack[1024];
+        DataUnit* m_OperandStackBasePtr;
+        DataUnit* m_OperandStackPtr;
+        DataUnit m_OperandStack[1024];
 
         inline unsigned char NextByte();
 
         inline long long NextInt();
 
-        inline StackData OperandPeek();
+        inline DataUnit OperandPeek();
 
-        inline void OperandPush(const StackData& sd);
+        inline void OperandPush(const DataUnit& sd);
 
-        inline StackData OperandPop();
+        inline DataUnit OperandPop();
 
     public:
         explicit VirtualMachine(unsigned char*);

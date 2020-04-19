@@ -43,3 +43,9 @@
 #define ICONST_3  0x06
 #define ICONST_4  0x07
 #define ICONST_5  0x08
+
+
+// pointers
+#define PTR_ACCESS 0x19 // pointer -> data
+#define PTR_STORE  0x3a // pointer, data -> void
+#define PTR_STACK  0x32 // void -> pointer

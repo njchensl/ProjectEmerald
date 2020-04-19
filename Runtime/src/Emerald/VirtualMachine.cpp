@@ -23,69 +23,69 @@ namespace Emerald
         {
         case IADD:
         {
-            OperandPush(StackData(OperandPop().AsInt + OperandPop().AsInt));
+            OperandPush(DataUnit(OperandPop().AsInt + OperandPop().AsInt));
             break;
         }
         case ISUB:
         {
             long long b = OperandPop().AsInt;
             long long a = OperandPop().AsInt;
-            OperandPush(StackData(a - b));
+            OperandPush(DataUnit(a - b));
             break;
         }
         case IMUL:
         {
-            OperandPush(StackData(OperandPop().AsInt * OperandPop().AsInt));
+            OperandPush(DataUnit(OperandPop().AsInt * OperandPop().AsInt));
             break;
         }
         case IDIV:
         {
-            OperandPush(StackData(OperandPop().AsInt / OperandPop().AsInt));
+            OperandPush(DataUnit(OperandPop().AsInt / OperandPop().AsInt));
             break;
         }
         case INEG:
         {
-            OperandPush(StackData(-OperandPop().AsInt));
+            OperandPush(DataUnit(-OperandPop().AsInt));
             break;
         }
         case ICONST_M1:
         {
-            OperandPush(StackData(-1LL));
+            OperandPush(DataUnit(-1LL));
             break;
         }
         case ICONST_0:
         {
-            OperandPush(StackData(0LL));
+            OperandPush(DataUnit(0LL));
             break;
         }
         case ICONST_1:
         {
-            OperandPush(StackData(1LL));
+            OperandPush(DataUnit(1LL));
             break;
         }
         case ICONST_2:
         {
-            OperandPush(StackData(2LL));
+            OperandPush(DataUnit(2LL));
             break;
         }
         case ICONST_3:
         {
-            OperandPush(StackData(3LL));
+            OperandPush(DataUnit(3LL));
             break;
         }
         case ICONST_4:
         {
-            OperandPush(StackData(4LL));
+            OperandPush(DataUnit(4LL));
             break;
         }
         case ICONST_5:
         {
-            OperandPush(StackData(5LL));
+            OperandPush(DataUnit(5LL));
             break;
         }
         case ILDC:
         {
-            OperandPush(StackData(NextInt()));
+            OperandPush(DataUnit(NextInt()));
             break;
         }
         case DUP:
@@ -95,7 +95,7 @@ namespace Emerald
         }
         case IFEQ:
         {
-            StackData d = OperandPop();
+            DataUnit d = OperandPop();
             long long offset = NextInt();
             if (d.AsInt == 0)
             {
@@ -105,7 +105,7 @@ namespace Emerald
         }
         case IFGE:
         {
-            StackData d = OperandPop();
+            DataUnit d = OperandPop();
             long long offset = NextInt();
             if (d.AsInt >= 0)
             {
@@ -115,7 +115,7 @@ namespace Emerald
         }
         case IFGT:
         {
-            StackData d = OperandPop();
+            DataUnit d = OperandPop();
             long long offset = NextInt();
             if (d.AsInt > 0)
             {
@@ -125,7 +125,7 @@ namespace Emerald
         }
         case IFLE:
         {
-            StackData d = OperandPop();
+            DataUnit d = OperandPop();
             long long offset = NextInt();
             if (d.AsInt <= 0)
             {
@@ -135,7 +135,7 @@ namespace Emerald
         }
         case IFLT:
         {
-            StackData d = OperandPop();
+            DataUnit d = OperandPop();
             long long offset = NextInt();
             if (d.AsInt < 0)
             {
@@ -145,7 +145,7 @@ namespace Emerald
         }
         case IFNE:
         {
-            StackData d = OperandPop();
+            DataUnit d = OperandPop();
             long long offset = NextInt();
             if (d.AsInt != 0 || d.AsFloat != 0)
             {
@@ -153,11 +153,29 @@ namespace Emerald
             }
             break;
         }
+        case PTR_ACCESS:
+        {
+            auto* ptr = (DataUnit*)OperandPop().AsPointer;
+            OperandPush(*ptr);
+            break;
+        }
+        case PTR_STORE:
+        {
+            DataUnit data = OperandPop();
+            auto* ptr = (DataUnit*)OperandPop().AsPointer;
+            *ptr = data;
+            break;
+        }
+        case PTR_STACK:
+        {
+            OperandPush(DataUnit(m_OperandStackPtr));
+            break;
+        }
         case CALL:
         {
             int numArgs = NextByte();
             auto* address = (unsigned char*)((unsigned long long)m_PC0 + NextInt());
-            std::stack<StackData> args;
+            std::stack<DataUnit> args;
             for (int i = 0; i < numArgs; i++)
             {
                 args.push(OperandPop());
@@ -165,8 +183,8 @@ namespace Emerald
             // push the original base pointer, then the return address onto the operand stack, then the args
             // TODO compressed pointers, instead of saving the data as a pointer, save it as a memory offset, so that
             // the total amount of addressable memory remains 4 GB.
-            OperandPush(StackData((long long)m_OperandStackBasePtr));
-            OperandPush(StackData((long long)m_PC));
+            OperandPush(DataUnit((long long)m_OperandStackBasePtr));
+            OperandPush(DataUnit((long long)m_PC));
             m_OperandStackBasePtr = m_OperandStackPtr + 1;
 
             for (int i = 0; i < numArgs; i++)
@@ -181,15 +199,15 @@ namespace Emerald
         {
             m_OperandStackPtr = m_OperandStackBasePtr - 1;
             m_PC = reinterpret_cast<unsigned char*>(OperandPop().AsInt);
-            m_OperandStackBasePtr = reinterpret_cast<StackData*>(OperandPop().AsInt);
+            m_OperandStackBasePtr = reinterpret_cast<DataUnit*>(OperandPop().AsInt);
             break;
         }
         case DRETURN:
         {
-            StackData ret = OperandPop();
+            DataUnit ret = OperandPop();
             m_OperandStackPtr = m_OperandStackBasePtr - 1;
             m_PC = reinterpret_cast<unsigned char*>(OperandPop().AsInt);
-            m_OperandStackBasePtr = reinterpret_cast<StackData*>(OperandPop().AsInt);
+            m_OperandStackBasePtr = reinterpret_cast<DataUnit*>(OperandPop().AsInt);
             OperandPush(ret);
             break;
         }
@@ -202,19 +220,19 @@ namespace Emerald
         }
         case I2F:
         {
-            OperandPush(StackData((double)OperandPop().AsInt));
+            OperandPush(DataUnit((double)OperandPop().AsInt));
             break;
         }
         case F2I:
         {
-            OperandPush(StackData((long long)OperandPop().AsFloat));
+            OperandPush(DataUnit((long long)OperandPop().AsFloat));
             break;
         }
         case SWAP:
         {
             int index1 = NextByte();
             int index2 = NextByte();
-            StackData temp = m_OperandStackBasePtr[index1];
+            DataUnit temp = m_OperandStackBasePtr[index1];
             m_OperandStackBasePtr[index1] = m_OperandStackBasePtr[index2];
             m_OperandStackBasePtr[index2] = temp;
             break;
@@ -241,17 +259,17 @@ namespace Emerald
         return *(m_PC++);
     }
 
-    StackData VirtualMachine::OperandPeek()
+    DataUnit VirtualMachine::OperandPeek()
     {
         return *m_OperandStackPtr;
     }
 
-    void VirtualMachine::OperandPush(const StackData& sd)
+    void VirtualMachine::OperandPush(const DataUnit& sd)
     {
         *(++m_OperandStackPtr) = sd;
     }
 
-    StackData VirtualMachine::OperandPop()
+    DataUnit VirtualMachine::OperandPop()
     {
         return *(m_OperandStackPtr--);
     }
