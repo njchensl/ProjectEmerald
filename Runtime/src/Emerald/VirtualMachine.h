@@ -1,7 +1,7 @@
 #pragma once
 
 #include <exception>
-#include "OperandStackData.h"
+#include "DataUnit.h"
 
 namespace Emerald
 {
@@ -31,7 +31,7 @@ namespace Emerald
 
         inline DataUnit OperandPeek();
 
-        inline void OperandPush(const DataUnit& sd);
+        inline void OperandPush(const DataUnit& du);
 
         inline DataUnit OperandPop();
 

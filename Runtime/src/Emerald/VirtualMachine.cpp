@@ -237,6 +237,17 @@ namespace Emerald
             m_OperandStackBasePtr[index2] = temp;
             break;
         }
+        case POP:
+        {
+            OperandPop();
+            break;
+        }
+        case POP2:
+        {
+            OperandPop();
+            OperandPop();
+            break;
+        }
         case HALT:
         {
             while (m_OperandStackPtr > m_OperandStack)
@@ -264,9 +275,9 @@ namespace Emerald
         return *m_OperandStackPtr;
     }
 
-    void VirtualMachine::OperandPush(const DataUnit& sd)
+    void VirtualMachine::OperandPush(const DataUnit& du)
     {
-        *(++m_OperandStackPtr) = sd;
+        *(++m_OperandStackPtr) = du;
     }
 
     DataUnit VirtualMachine::OperandPop()

@@ -166,12 +166,12 @@
     <ClInclude Include="src\Emerald\Core.h" />
     <ClInclude Include="src\Emerald\Disassembler.h" />
     <ClInclude Include="src\Emerald\Instructions.h" />
-    <ClInclude Include="src\Emerald\OperandStackData.h" />
+    <ClInclude Include="src\Emerald\DataUnit.h" />
     <ClInclude Include="src\Emerald\VirtualMachine.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Emerald\Disassembler.cpp" />
-    <ClCompile Include="src\Emerald\OperandStackData.cpp" />
+    <ClCompile Include="src\Emerald\DataUnit.cpp" />
     <ClCompile Include="src\Emerald\VirtualMachine.cpp" />
     <ClCompile Include="src\Emerald\main.cpp" />
   </ItemGroup>

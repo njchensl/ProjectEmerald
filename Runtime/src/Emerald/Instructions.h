@@ -5,6 +5,8 @@
 // stack operations
 #define SWAP      0x5f
 #define DUP       0x59
+#define POP       0x57
+#define POP2      0x58
 
 // control flow
 #define GOTO      0xa7

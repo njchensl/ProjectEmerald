@@ -205,6 +205,16 @@ namespace Emerald
             ss << index2;
             break;
         }
+        case POP:
+        {
+            ss << "pop";
+            break;
+        }
+        case POP2:
+        {
+            ss << "pop2";
+            break;
+        }
         case HALT:
         {
             ss << "halt";
