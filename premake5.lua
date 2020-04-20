@@ -34,6 +34,7 @@ project "Runtime"
 
     includedirs
     {
+        "%{prj.name}/vendor/boost"
     }
 
     filter "system:windows"
