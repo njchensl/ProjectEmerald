@@ -56,16 +56,14 @@ namespace Emerald
     // acts as data struct only
     struct Type
     {
-        Type(PrimitiveType type)
+        Type(PrimitiveType type) : AsPrimitiveType(type)
         {
             Primitive = true;
-            AsPrimitiveType = type;
         }
 
-        Type(Class* type)
+        Type(Class* type) : AsClassType(type)
         {
             Primitive = false;
-            AsClassType = type;
         }
 
         std::string ToString() const;
@@ -77,5 +75,28 @@ namespace Emerald
             PrimitiveType AsPrimitiveType;
             Class* AsClassType;
         };
+
+
+        Type(const Type& other) : Primitive(other.Primitive)
+        {
+        }
+
+        friend bool operator==(const Type& lhs, const Type& rhs)
+        {
+            if (lhs.Primitive != rhs.Primitive)
+            {
+                return false;
+            }
+            if (lhs.Primitive)
+            {
+                return lhs.AsPrimitiveType == rhs.AsPrimitiveType;
+            }
+            return lhs.AsClassType == rhs.AsClassType;
+        }
+
+        friend bool operator!=(const Type& lhs, const Type& rhs)
+        {
+            return !(lhs == rhs);
+        }
     };
 }

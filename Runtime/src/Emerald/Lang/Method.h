@@ -16,7 +16,7 @@ namespace Emerald
     public:
 
         Method(Class* class_, Visibility visibility, bool static_, const Type& returnType, const std::string& name,
-               const std::vector<std::pair<Type, std::string>>& args, const unsigned char* const code) : m_Class(class_),
+               const std::vector<std::pair<Type, std::string>>& args, unsigned char* code) : m_Class(class_),
                                                                                              m_Visibility(visibility),
                                                                                              m_Static(static_),
                                                                                              m_ReturnType(returnType),
@@ -26,7 +26,7 @@ namespace Emerald
         {
         }
 
-        const unsigned char* GetCode() const
+        unsigned char* GetCode() const
         {
             return m_Code;
         }
@@ -36,11 +36,13 @@ namespace Emerald
             return m_Class;
         }
 
-        void SetClass(Class* cls) {
+        void SetClass(Class* cls)
+        {
             m_Class = cls;
         }
 
         std::string GetSignature() const;
+
     private:
         // will never be modified once created
         Class* m_Class;
@@ -49,6 +51,6 @@ namespace Emerald
         Type m_ReturnType;
         std::string m_Name;
         std::vector<std::pair<Type, std::string>> m_Args;
-        const unsigned char* const m_Code;
+        unsigned char* m_Code;
     };
 }

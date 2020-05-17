@@ -5,6 +5,7 @@
 #include "Core.h"
 #include "Disassembler.h"
 #include "Lang/Field.h"
+#include "Lang/Method.h"
 #include "Runtime/VirtualMachine.h"
 
 enum class ExecutionMode

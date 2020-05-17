@@ -1,12 +1,13 @@
 ﻿#pragma once
 #include <sstream>
 
-#include "Class.h"
 #include "Modifiers.h"
 #include "Type.h"
 
 namespace Emerald
 {
+    class Class;
+
     // these classes will only be instantiated once and will only act as a blueprint for concrete data
     class Field
     {
