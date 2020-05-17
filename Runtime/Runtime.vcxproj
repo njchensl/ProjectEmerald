@@ -103,6 +103,8 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <AdditionalOptions>/Qpar /Qpar-report:1 /Qvec-report:1 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -119,6 +121,8 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <AdditionalOptions>/Qpar /Qpar-report:1 /Qvec-report:1 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -138,12 +142,15 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <AdditionalOptions>/Qpar /Qpar-report:1 /Qvec-report:1 /O2 /Ob2 /Ot /Oy /GT /GL %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalOptions>/LTCG %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
@@ -158,28 +165,39 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <AdditionalOptions>/Qpar /Qpar-report:1 /Qvec-report:1 /O2 /Ob2 /Ot /Oy /GT /GL %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalOptions>/LTCG %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Emerald\Compiler.h" />
+    <ClInclude Include="src\Emerald\Lang\Field.h" />
+    <ClInclude Include="src\Emerald\Lang\Method.h" />
+    <ClInclude Include="src\Emerald\Lang\Class.h" />
     <ClInclude Include="src\Emerald\Core.h" />
     <ClInclude Include="src\Emerald\DataUnit.h" />
     <ClInclude Include="src\Emerald\Disassembler.h" />
     <ClInclude Include="src\Emerald\Instructions.h" />
-    <ClInclude Include="src\Emerald\VirtualMachine.h" />
+    <ClInclude Include="src\Emerald\Lang\Modifiers.h" />
+    <ClInclude Include="src\Emerald\Runtime\StackFrame.h" />
+    <ClInclude Include="src\Emerald\Runtime\VirtualMachine.h" />
+    <ClInclude Include="src\Emerald\Lang\Type.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Emerald\Compiler.cpp" />
-    <ClCompile Include="src\Emerald\DataUnit.cpp" />
+    <ClCompile Include="src\Emerald\Lang\Field.cpp" />
+    <ClCompile Include="src\Emerald\Lang\Method.cpp" />
+    <ClCompile Include="src\Emerald\Lang\Class.cpp" />
     <ClCompile Include="src\Emerald\Disassembler.cpp" />
-    <ClCompile Include="src\Emerald\VirtualMachine.cpp" />
+    <ClCompile Include="src\Emerald\Runtime\StackFrame.cpp" />
+    <ClCompile Include="src\Emerald\Runtime\VirtualMachine.cpp" />
     <ClCompile Include="src\Emerald\main.cpp" />
+    <ClCompile Include="src\Emerald\Lang\Type.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

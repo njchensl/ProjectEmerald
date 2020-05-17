@@ -2,21 +2,44 @@
 
 namespace Emerald
 {
-    struct DataUnit {
-        explicit DataUnit();
+    struct alignas(4) DataUnit
+    {
+        explicit DataUnit(int intValue)
+        {
+            AsInt = intValue;
+        }
 
-        explicit DataUnit(long long);
+        explicit DataUnit(float floatValue)
+        {
+            AsFloat = floatValue;
+        }
 
-        explicit DataUnit(double);
-
-        explicit DataUnit(void* ptr);
-
-        union {
-            long long AsInt;
-            unsigned long long AsUnsignedInt;
-            double AsFloat;
-            void* AsPointer;
+        union
+        {
+            int AsInt;
+            float AsFloat;
+            unsigned int AsUInt; // for internal use only
         };
+
+        explicit operator int()
+        {
+            return AsInt;
+        }
+
+        explicit operator unsigned int()
+        {
+            return AsUInt;
+        }
+
+        explicit operator float()
+        {
+            return AsFloat;
+        }
+
+        static double GetDoubleValue(DataUnit lower, DataUnit higher)
+        {
+            unsigned long long value = (unsigned int)lower | (unsigned int)higher << 4;
+            return *(double*)&value;
+        }
     };
 }
-

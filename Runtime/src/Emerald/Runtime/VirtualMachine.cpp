@@ -2,8 +2,11 @@
 #include <vector>
 #include <stack>
 #include "VirtualMachine.h"
-#include "Instructions.h"
 
+#include "../DataUnit.h"
+#include "../Instructions.h"
+
+#if 0
 namespace Emerald
 {
     VirtualMachine::VirtualMachine(unsigned char* p0) : m_PC(p0), m_PC0(p0)
@@ -299,3 +302,5 @@ namespace Emerald
 
     VirtualMachine::~VirtualMachine() = default;
 }
+
+#endif

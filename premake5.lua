@@ -10,6 +10,21 @@ workspace "ProjectEmerald"
         "Dist"
     }
 
+vectorextensions "AVX2"
+buildoptions {
+    "/Qpar", "/Qpar-report:1", "/Qvec-report:1"
+}
+
+filter "configurations:Release"
+    linkoptions {
+        "/LTCG"
+    }
+filter "configurations:Dist"
+    linkoptions {
+        "/LTCG"
+    }
+
+
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 -- Include directories relative to root folder (solution directory)
@@ -60,6 +75,9 @@ project "Runtime"
         defines "EM_RELEASE"
         runtime "Release"
         optimize "on"
+        buildoptions {
+            "/O2", "/Ob2", "/Ot", "/Oy", "/GT", "/GL"
+        }
         debugargs {
             "C:\\Users\\njche\\Desktop\\Test.exec"
         }
@@ -68,6 +86,9 @@ project "Runtime"
         defines "EM_DIST"
         runtime "Release"
         optimize "on"
+        buildoptions {
+            "/O2", "/Ob2", "/Ot", "/Oy", "/GT", "/GL"
+        }
         debugargs {
             "C:\\Users\\njche\\Desktop\\Test.exec"
         }

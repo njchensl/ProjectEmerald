@@ -4,7 +4,8 @@
 
 #include "Core.h"
 #include "Disassembler.h"
-#include "VirtualMachine.h"
+#include "Lang/Field.h"
+#include "Runtime/VirtualMachine.h"
 
 enum class ExecutionMode
 {
@@ -16,6 +17,24 @@ enum class ExecutionMode
 int main(int argc, char** argv)
 {
     using namespace Emerald;
+
+
+    Method method(
+        nullptr,
+        Visibility::Public,
+        true,
+        PrimitiveType::Void,
+        "main",
+        {
+            {PrimitiveType::Int, "argc"},
+            {PrimitiveType::Char, "argv"}
+        },
+        nullptr
+    );
+    std::cout << method.GetSignature();
+
+#if 0
+
 
     EM_CORE_ASSERT(argc >= 2, "Argument count must be greater than or equal to 2!");
     if (argc == 1)
@@ -82,4 +101,5 @@ int main(int argc, char** argv)
         EM_CORE_ASSERT(false, "Invalid execution path!");
     }
     }
+#endif
 }

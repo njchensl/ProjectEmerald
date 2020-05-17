@@ -1,8 +1,9 @@
 #pragma once
 
 #include <exception>
-#include "DataUnit.h"
+#include "../DataUnit.h"
 
+#if 0
 namespace Emerald
 {
     class UnknownInstructionError : std::exception {};
@@ -45,3 +46,4 @@ namespace Emerald
 }
 
 
+#endif
