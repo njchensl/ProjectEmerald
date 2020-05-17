@@ -4,6 +4,7 @@
 
 #include "Core.h"
 #include "Disassembler.h"
+#include "Lang/Class.h"
 #include "Lang/Field.h"
 #include "Lang/Method.h"
 #include "Runtime/VirtualMachine.h"
@@ -19,20 +20,10 @@ int main(int argc, char** argv)
 {
     using namespace Emerald;
 
+    Class cls("java/lang/String");
+    std::cout << cls.GetType().ToString();
 
-    Method method(
-        nullptr,
-        Visibility::Public,
-        true,
-        PrimitiveType::Void,
-        "main",
-        {
-            {PrimitiveType::Int, "argc"},
-            {PrimitiveType::Char, "argv"}
-        },
-        nullptr
-    );
-    std::cout << method.GetSignature();
+    // TODO : ORDER IS IMPORTANT! First load all classes, then their fields, finally the methods
 
 #if 0
 

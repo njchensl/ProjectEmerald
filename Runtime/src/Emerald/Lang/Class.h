@@ -11,7 +11,7 @@ namespace Emerald
     class Class
     {
     public:
-        Class(const std::string& name, const std::vector<Field>& fields) : m_Name(name)
+        Class(const std::string& name) : m_Name(name)
         {
         }
 
