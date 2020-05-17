@@ -33,11 +33,13 @@ namespace Emerald
 
     Field* Class::GetFieldBySignature(const std::string& signature) const
     {
+        // TODO : first check itself, then super classes
         return m_FieldSignatureMap.at(signature);
     }
 
     Method* Class::GetMethodBySignature(const std::string& signature) const
     {
+        // TODO : first check itself, then super classes
         return m_MethodSignatureMap.at(signature);
     }
 

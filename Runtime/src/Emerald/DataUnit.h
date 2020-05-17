@@ -18,6 +18,7 @@ namespace Emerald
         {
             int AsInt;
             float AsFloat;
+            // TODO : reference type
             unsigned int AsUInt; // for internal use only
         };
 
@@ -38,8 +39,14 @@ namespace Emerald
 
         static double GetDoubleValue(DataUnit lower, DataUnit higher)
         {
-            unsigned long long value = (unsigned int)lower | (unsigned int)higher << 4;
+            unsigned long long value = (unsigned int)lower | (unsigned long long)(unsigned int)higher << 32;
             return *(double*)&value;
+        }
+
+        static long long GetLongValue(DataUnit lower, DataUnit higher)
+        {
+            unsigned long long value = (unsigned int)lower | (unsigned long long)(unsigned int)higher << 32;
+            return *(long long*)&value;
         }
     };
 }

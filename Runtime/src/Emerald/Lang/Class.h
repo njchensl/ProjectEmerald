@@ -32,5 +32,6 @@ namespace Emerald
         std::vector<Method> m_Methods;
         std::map<std::string, Field*> m_FieldSignatureMap;
         std::map<std::string, Method*> m_MethodSignatureMap;
+        // TODO : constant pool
     };
 }
