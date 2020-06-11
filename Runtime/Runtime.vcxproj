@@ -177,27 +177,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Emerald\Lang\Field.h" />
-    <ClInclude Include="src\Emerald\Lang\Method.h" />
-    <ClInclude Include="src\Emerald\Lang\Class.h" />
     <ClInclude Include="src\Emerald\Core.h" />
-    <ClInclude Include="src\Emerald\DataUnit.h" />
     <ClInclude Include="src\Emerald\Disassembler.h" />
     <ClInclude Include="src\Emerald\Instructions.h" />
-    <ClInclude Include="src\Emerald\Lang\Modifiers.h" />
-    <ClInclude Include="src\Emerald\Runtime\StackFrame.h" />
+    <ClInclude Include="src\Emerald\Runtime\Registers.h" />
     <ClInclude Include="src\Emerald\Runtime\VirtualMachine.h" />
-    <ClInclude Include="src\Emerald\Lang\Type.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Emerald\Lang\Field.cpp" />
-    <ClCompile Include="src\Emerald\Lang\Method.cpp" />
-    <ClCompile Include="src\Emerald\Lang\Class.cpp" />
     <ClCompile Include="src\Emerald\Disassembler.cpp" />
-    <ClCompile Include="src\Emerald\Runtime\StackFrame.cpp" />
+    <ClCompile Include="src\Emerald\Runtime\Registers.cpp" />
     <ClCompile Include="src\Emerald\Runtime\VirtualMachine.cpp" />
     <ClCompile Include="src\Emerald\main.cpp" />
-    <ClCompile Include="src\Emerald\Lang\Type.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

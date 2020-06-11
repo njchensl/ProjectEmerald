@@ -1,10 +1,4 @@
-#include <iostream>
-#include <vector>
-#include <stack>
 #include "VirtualMachine.h"
-
-#include "../DataUnit.h"
-#include "../Instructions.h"
 
 #if 0
 namespace Emerald

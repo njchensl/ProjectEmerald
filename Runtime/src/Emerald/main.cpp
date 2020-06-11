@@ -4,9 +4,7 @@
 
 #include "Core.h"
 #include "Disassembler.h"
-#include "Lang/Class.h"
-#include "Lang/Field.h"
-#include "Lang/Method.h"
+#include "Runtime/Registers.h"
 #include "Runtime/VirtualMachine.h"
 
 enum class ExecutionMode
@@ -19,12 +17,7 @@ enum class ExecutionMode
 int main(int argc, char** argv)
 {
     using namespace Emerald;
-
-    Class cls("java/lang/String");
-    std::cout << cls.GetType().ToString();
-
-    // TODO : ORDER IS IMPORTANT! First load all classes, then their fields, finally the methods
-
+    
 #if 0
 
 
