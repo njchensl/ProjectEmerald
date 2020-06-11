@@ -31,41 +31,29 @@ namespace Emerald
     {
         Registers();
 
-        REGISTER_A_TO_D(a)
-
-        REGISTER_A_TO_D(b)
-
-        REGISTER_A_TO_D(c)
-
-        REGISTER_A_TO_D(d)
-
-        REGISTER_SPECIAL(si)
-
-        REGISTER_SPECIAL(di)
-
+        //REGISTER_A_TO_D(a)
+        //REGISTER_A_TO_D(b)
+        //REGISTER_A_TO_D(c)
+        //REGISTER_A_TO_D(d)
+        //REGISTER_SPECIAL(si)
+        //REGISTER_SPECIAL(di)
         REGISTER_SPECIAL(sp)
 
         REGISTER_SPECIAL(bp)
 
-        REGISTER_8_TO_15(8)
+        REGISTER_SPECIAL(ip)
 
-        REGISTER_8_TO_15(9)
-
-        REGISTER_8_TO_15(10)
-
-        REGISTER_8_TO_15(11)
-
-        REGISTER_8_TO_15(12)
-
-        REGISTER_8_TO_15(13)
-
-        REGISTER_8_TO_15(14)
-
-        REGISTER_8_TO_15(15)
+        //REGISTER_8_TO_15(8)
+        //REGISTER_8_TO_15(9)
+        //REGISTER_8_TO_15(10)
+        //REGISTER_8_TO_15(11)
+        //REGISTER_8_TO_15(12)
+        //REGISTER_8_TO_15(13)
+        //REGISTER_8_TO_15(14)
+        //REGISTER_8_TO_15(15)
     };
 
 #undef REGISTER_A_TO_D
 #undef REGISTER_SPECIAL
 #undef REGISTER_8_TO_15
-
 }

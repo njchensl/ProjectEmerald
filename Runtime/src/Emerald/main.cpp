@@ -6,6 +6,7 @@
 #include "Disassembler.h"
 #include "Runtime/Registers.h"
 #include "Runtime/VirtualMachine.h"
+#include "Runtime/OperandStack.h"
 
 enum class ExecutionMode
 {
@@ -17,7 +18,8 @@ enum class ExecutionMode
 int main(int argc, char** argv)
 {
     using namespace Emerald;
-    
+    OperandStack<100> stack;
+
 #if 0
 
 
