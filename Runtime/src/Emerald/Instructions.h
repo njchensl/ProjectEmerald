@@ -75,6 +75,7 @@
 #define DPOP   0x0235
 #define ZPOP   0x0236
 #define CPOP   0x0237
+// local var stack operations
 #define BLOAD  0x0240
 #define SLOAD  0x0241
 #define ILOAD  0x0242

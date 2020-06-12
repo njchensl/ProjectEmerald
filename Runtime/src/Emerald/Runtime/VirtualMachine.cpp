@@ -19,6 +19,7 @@ namespace Emerald
         ushort instruction = NextUShort();
         switch (instruction)
         {
+            // arithmetic operations
 #define ADD_OPERATION(name, type) case name: { type var0 = m_OperandStack.Pop##type##();  \
     type var1 = m_OperandStack.Pop##type##(); \
     m_OperandStack.Push##type##((type)(var0 + var1));\
@@ -94,6 +95,7 @@ namespace Emerald
         DIV_OPERATION(FDIV, Float)
         DIV_OPERATION(DDIV, Double)
 #undef DIV_OPERATION
+            // logical
         case ZAND:
         {
             Bool var0 = m_OperandStack.PopBool();
@@ -142,6 +144,7 @@ namespace Emerald
             m_OperandStack.PushBool(!(bool)((byte)var0 ^ (byte)var1));
             break;
         }
+            // control flow and functions
         case JMP:
         {
             break;
@@ -178,70 +181,29 @@ namespace Emerald
         {
             break;
         }
-        case BPUSH:
-        {
-            break;
-        }
-        case SPUSH:
-        {
-            break;
-        }
-        case IPUSH:
-        {
-            break;
-        }
-        case JPUSH:
-        {
-            break;
-        }
-        case FPUSH:
-        {
-            break;
-        }
-        case DPUSH:
-        {
-            break;
-        }
-        case ZPUSH:
-        {
-            break;
-        }
-        case CPUSH:
-        {
-            break;
-        }
-        case BPOP:
-        {
-            break;
-        }
-        case SPOP:
-        {
-            break;
-        }
-        case IPOP:
-        {
-            break;
-        }
-        case JPOP:
-        {
-            break;
-        }
-        case FPOP:
-        {
-            break;
-        }
-        case DPOP:
-        {
-            break;
-        }
-        case ZPOP:
-        {
-            break;
-        }
-        case CPOP:
-        {
-            break;
-        }
+            // operand stack operations
+#define OPERAND_STACK_PUSH_OPERATION(name, type) case name : { m_OperandStack.Push##type##(Next##type()); break; }
+        OPERAND_STACK_PUSH_OPERATION(BPUSH, Byte)
+        OPERAND_STACK_PUSH_OPERATION(SPUSH, Short)
+        OPERAND_STACK_PUSH_OPERATION(IPUSH, Int)
+        OPERAND_STACK_PUSH_OPERATION(JPUSH, Long)
+        OPERAND_STACK_PUSH_OPERATION(FPUSH, Float)
+        OPERAND_STACK_PUSH_OPERATION(DPUSH, Double)
+        OPERAND_STACK_PUSH_OPERATION(ZPUSH, Bool)
+        OPERAND_STACK_PUSH_OPERATION(CPUSH, Char)
+#undef  OPERAND_STACK_PUSH_OPERATION
+
+#define OPERAND_STACK_POP_OPERATION(name, type) case name : { m_OperandStack.Pop##type##(); break; }
+        OPERAND_STACK_POP_OPERATION(BPOP, Byte)
+        OPERAND_STACK_POP_OPERATION(SPOP, Short)
+        OPERAND_STACK_POP_OPERATION(IPOP, Int)
+        OPERAND_STACK_POP_OPERATION(JPOP, Long)
+        OPERAND_STACK_POP_OPERATION(FPOP, Float)
+        OPERAND_STACK_POP_OPERATION(DPOP, Double)
+        OPERAND_STACK_POP_OPERATION(ZPOP, Bool)
+        OPERAND_STACK_POP_OPERATION(CPOP, Char)
+#undef  OPERAND_STACK_POP_OPERATION
+
         case BLOAD:
         {
             break;
@@ -306,24 +268,30 @@ namespace Emerald
         {
             break;
         }
+            // registers
         case ACCRIP:
         {
+            m_OperandStack.PushULong(m_Registers.rip);
             break;
         }
         case ACCRSP:
         {
+            m_OperandStack.PushULong(m_Registers.rsp);
             break;
         }
         case ACCRBP:
         {
+            m_OperandStack.PushULong(m_Registers.rbp);
             break;
         }
         case PUTRSP:
         {
+            m_Registers.rsp = m_OperandStack.PopULong();
             break;
         }
         case PUTRBP:
         {
+            m_Registers.rbp = m_OperandStack.PopULong();
             break;
         }
         default:
@@ -345,6 +313,13 @@ namespace Emerald
         return value;
     }
 
+    Short VirtualMachine::NextShort()
+    {
+        Short value = *(Short*)m_Registers.rip;
+        m_Registers.rip += 2;
+        return value;
+    }
+
     Int VirtualMachine::NextInt()
     {
         Int value = *(Int*)m_Registers.rip;
@@ -356,6 +331,34 @@ namespace Emerald
     {
         Long value = *(Long*)m_Registers.rip;
         m_Registers.rip += 8;
+        return value;
+    }
+
+    Float VirtualMachine::NextFloat()
+    {
+        Float value = *(Float*)m_Registers.rip;
+        m_Registers.rip += 4;
+        return value;
+    }
+
+    Double VirtualMachine::NextDouble()
+    {
+        Double value = *(Double*)m_Registers.rip;
+        m_Registers.rip += 8;
+        return value;
+    }
+
+    Bool VirtualMachine::NextBool()
+    {
+        Bool value = *(Bool*)m_Registers.rip;
+        m_Registers.rip += sizeof Bool;
+        return value;
+    }
+
+    Char VirtualMachine::NextChar()
+    {
+        Char value = *(Char*)m_Registers.rip;
+        m_Registers.rip += sizeof Char;
         return value;
     }
 

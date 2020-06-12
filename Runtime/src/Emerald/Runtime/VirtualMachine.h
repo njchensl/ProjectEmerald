@@ -31,8 +31,13 @@ namespace Emerald
 
         inline byte NextByte();
         inline ushort NextUShort();
+        inline Short NextShort();
         inline Int NextInt();
         inline Long NextLong();
+        inline Float NextFloat();
+        inline Double NextDouble();
+        inline Bool NextBool();
+        inline Char NextChar();
 
     public:
         explicit VirtualMachine(byte*);
