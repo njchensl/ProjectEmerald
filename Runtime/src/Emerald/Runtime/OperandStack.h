@@ -13,262 +13,50 @@ namespace Emerald
         }
 
         // push
-        void PushByte(byte b)
-        {
-            *(m_StackPtr++) = b;
-        }
-
-        OperandStack& operator<<(byte b)
-        {
-            PushByte(b);
-            return *this;
-        }
-
-        void PushUShort(ushort s)
-        {
-            *(ushort*)m_StackPtr = s;
-            m_StackPtr += 2;
-        }
-
-        void PushUInt(uint i)
-        {
-            *(uint*)m_StackPtr = i;
-            m_StackPtr += 4;
-        }
-
-        void PushULong(ulong l)
-        {
-            *(ulong*)m_StackPtr = l;
-            m_StackPtr += 8;
-        }
-
-        void PushSByte(sbyte b)
-        {
-            *(sbyte*)(m_StackPtr++) = b;
-        }
-
-        OperandStack& operator<<(sbyte b)
-        {
-            PushByte(b);
-            return *this;
-        }
-
-        void PushShort(Short s)
-        {
-            *(Short*)m_StackPtr = s;
-            m_StackPtr += 2;
-        }
-
-        void PushInt(Int i)
-        {
-            *(Int*)m_StackPtr = i;
-            m_StackPtr += 4;
-        }
-
-        void PushLong(Long l)
-        {
-            *(Long*)m_StackPtr = l;
-            m_StackPtr += 8;
-        }
-
-        void PushFloat(float f)
-        {
-            *(float*)m_StackPtr = f;
-            m_StackPtr += 4;
-        }
-
-        OperandStack& operator<<(float f)
-        {
-            PushFloat(f);
-            return *this;
-        }
-
-        void PushDouble(double d)
-        {
-            *(double*)m_StackPtr = d;
-            m_StackPtr += 8;
-        }
-
-        OperandStack& operator<<(double d)
-        {
-            PushDouble(d);
-            return *this;
-        }
-
-        void PushChar(Char c)
-        {
-            *(Char*)m_StackPtr = c;
-            m_StackPtr += sizeof Char;
-        }
-
-        OperandStack& operator<<(Char c)
-        {
-            PushChar(c);
-            return *this;
-        }
-
-        void PushBool(bool b)
-        {
-            *(bool*)m_StackPtr = b;
-            m_StackPtr += sizeof(bool);
-        }
-
-        OperandStack& operator<<(bool b)
-        {
-            PushBool(b);
-            return *this;
-        }
+#define OPERAND_STACK_PUSH(type) void Push##type##(type val) { *(type*)m_StackPtr = val; m_StackPtr += sizeof type; } \
+    OperandStack& operator<<(type val) { Push##type##(val); return *this; }
+        OPERAND_STACK_PUSH(Byte)
+        OPERAND_STACK_PUSH(UShort)
+        OPERAND_STACK_PUSH(UInt)
+        OPERAND_STACK_PUSH(ULong)
+        OPERAND_STACK_PUSH(SByte)
+        OPERAND_STACK_PUSH(Short)
+        OPERAND_STACK_PUSH(Int)
+        OPERAND_STACK_PUSH(Long)
+        OPERAND_STACK_PUSH(Float)
+        OPERAND_STACK_PUSH(Double)
+        OPERAND_STACK_PUSH(Char)
+        OPERAND_STACK_PUSH(Bool)
+#undef  OPERAND_STACK_PUSH
 
         // pop
-        byte PopByte()
-        {
-            m_StackPtr--;
-            return *m_StackPtr;
-        }
+#define OPERAND_STACK_POP(type) type Pop##type##() { m_StackPtr -= sizeof(type); return *(type*)m_StackPtr; } \
+    OperandStack& operator>>(##type##& val) { val = Pop##type##(); return *this; }
 
-        OperandStack& operator>>(byte& b)
-        {
-            b = PopByte();
-            return *this;
-        }
+        OPERAND_STACK_POP(Byte)
+        OPERAND_STACK_POP(UShort)
+        OPERAND_STACK_POP(UInt)
+        OPERAND_STACK_POP(ULong)
+        OPERAND_STACK_POP(SByte)
+        OPERAND_STACK_POP(Short)
+        OPERAND_STACK_POP(Int)
+        OPERAND_STACK_POP(Long)
+        OPERAND_STACK_POP(Float)
+        OPERAND_STACK_POP(Double)
+        OPERAND_STACK_POP(Char)
+        OPERAND_STACK_POP(Bool)
 
-        ushort PopUShort()
-        {
-            m_StackPtr -= 2;
-            return *(ushort*)m_StackPtr;
-        }
+#undef  OPERAND_STACK_POP
 
-        OperandStack& operator>>(ushort& s)
+        void Reset()
         {
-            s = PopUShort();
-            return *this;
+            m_StackPtr = m_StackBase;
         }
-
-        uint PopUInt()
-        {
-            m_StackPtr -= 4;
-            return *(uint*)m_StackPtr;
-        }
-
-        OperandStack& operator>>(uint& i)
-        {
-            i = PopUInt();
-            return *this;
-        }
-
-        ulong PopULong()
-        {
-            m_StackPtr -= 8;
-            return *(ulong*)m_StackPtr;
-        }
-
-        OperandStack& operator>>(ulong& l)
-        {
-            l = PopULong();
-            return *this;
-        }
-
-        sbyte PopSByte()
-        {
-            m_StackPtr--;
-            return *(sbyte*)m_StackPtr;
-        }
-
-        OperandStack& operator>>(sbyte& b)
-        {
-            b = PopSByte();
-            return *this;
-        }
-
-        Short PopShort()
-        {
-            m_StackPtr -= 2;
-            return *(Short*)m_StackPtr;
-        }
-
-        OperandStack& operator>>(Short& s)
-        {
-            s = PopShort();
-            return *this;
-        }
-
-        Int PopInt()
-        {
-            m_StackPtr -= 4;
-            return *(Int*)m_StackPtr;
-        }
-
-        OperandStack& operator>>(Int& i)
-        {
-            i = PopInt();
-            return *this;
-        }
-
-        Long PopLong()
-        {
-            m_StackPtr -= 8;
-            return *(Long*)m_StackPtr;
-        }
-
-        OperandStack& operator>>(Long& l)
-        {
-            l = PopLong();
-            return *this;
-        }
-
-        float PopFloat()
-        {
-            m_StackPtr -= 4;
-            return *(float*)m_StackPtr;
-        }
-
-        OperandStack& operator>>(float& f)
-        {
-            f = PopFloat();
-            return *this;
-        }
-
-        double PopDouble()
-        {
-            m_StackPtr -= 8;
-            return *(double*)m_StackPtr;
-        }
-
-        OperandStack& operator>>(double& l)
-        {
-            l = PopDouble();
-            return *this;
-        }
-
-        Char PopChar()
-        {
-            m_StackPtr -= sizeof Char;
-            return *(Char*)m_StackPtr;
-        }
-
-        OperandStack& operator>>(Char& c)
-        {
-            c = PopChar();
-            return *this;
-        }
-
-        bool PopBool()
-        {
-            m_StackPtr -= sizeof(bool);
-            return *(bool*)m_StackPtr;
-        }
-
-        OperandStack& operator>>(bool& b)
-        {
-            b = PopBool();
-            return *this;
-        }
-
 
     private:
         byte m_StackData[Size];
-        const byte* m_StackBase;
-        const byte* m_StackTop;
+        byte* const m_StackBase;
+        byte* const m_StackTop;
         // this pointer always points at the next available byte, i.e. the byte that it points at is always empty, or assumed to be empty
         byte* m_StackPtr;
     };

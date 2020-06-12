@@ -1,20 +1,21 @@
 ﻿#pragma once
+#include "Core.h"
 
 namespace Emerald
 {
     class Disassembler {
     public:
-        Disassembler(unsigned char* code, unsigned long long size);
+        Disassembler(byte* code, size_t size);
         void Execute();
 
     private:
-        unsigned char NextByte();
+        byte NextByte();
         long long NextInt();
 
-        unsigned char* m_PC;
-        const unsigned char* m_PC0;
-        const unsigned char* m_Data0;
-        unsigned long long m_Size;
+        byte* m_PC;
+        byte* const m_PC0;
+        byte* m_Data0;
+        size_t m_Size;
     };
 
 }

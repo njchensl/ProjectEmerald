@@ -8,7 +8,7 @@
 
 namespace Emerald
 {
-    Disassembler::Disassembler(unsigned char* code, unsigned long long size) : m_PC(code), m_PC0(code), m_Size(size)
+    Disassembler::Disassembler(byte* code, ulong size) : m_PC(code), m_PC0(code), m_Size(size)
     {
         // read code segment and data segment offsets
         unsigned long long codeOffset = NextInt();
@@ -29,18 +29,18 @@ namespace Emerald
 
         std::stringstream ss;
         ss << "0x" << std::hex << m_PC - m_PC0 << "\t";
-        unsigned char instruction = NextByte();
-        switch (instruction)
-        {
-        {
-            ss << "unknown";
-            break;
-        }
-        }
+        //unsigned char instruction = NextByte();
+        //switch (instruction)
+        //{
+        //{
+        //    ss << "unknown";
+        //    break;
+        //}
+        //}
         std::cout << ss.str() << std::endl;
     }
 
-    unsigned char Disassembler::NextByte()
+    byte Disassembler::NextByte()
     {
         return *(m_PC++);
     }

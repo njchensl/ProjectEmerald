@@ -18,9 +18,6 @@ enum class ExecutionMode
 int main(int argc, char** argv)
 {
     using namespace Emerald;
-    OperandStack<100> stack;
-#if 0
-
 
     EM_CORE_ASSERT(argc >= 2, "Argument count must be greater than or equal to 2!");
     if (argc == 1)
@@ -56,20 +53,22 @@ int main(int argc, char** argv)
 
     //std::cout << filepath << std::endl;
     std::ifstream input(filepath, std::ios::binary);
-    std::vector<unsigned char> buffer(std::istreambuf_iterator<char>(input), {});
+    std::vector<uint8_t> buffer(std::istreambuf_iterator<char>(input), {});
     //unsigned long long length = buffer.size();
-    unsigned char* code = &buffer[0];
+    byte* code = (byte*)buffer.data();
 
     switch (mode)
     {
     case ExecutionMode::Interpret:
     {
-        VirtualMachine vm(code);
+        VirtualMachine* vm = new VirtualMachine(code);
 
         for (;;)
         {
-            vm.Execute();
+            vm->Execute();
         }
+
+        delete vm;
 
         return 1;
     }
@@ -87,5 +86,5 @@ int main(int argc, char** argv)
         EM_CORE_ASSERT(false, "Invalid execution path!");
     }
     }
-#endif
+
 }

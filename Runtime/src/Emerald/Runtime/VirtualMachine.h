@@ -6,6 +6,7 @@
 
 #include "LocalVariableStack.h"
 #include "OperandStack.h"
+#include "OperandStackStack.h"
 #include "Registers.h"
 #include "../Core.h"
 
@@ -27,13 +28,15 @@ namespace Emerald
         Registers m_Registers;
         byte* m_Data0;
         OperandStack<1024> m_OperandStack;
+        OperandStackStack m_OperandStacks;
         LocalVariableStack m_LocalVariableStack;
 
-        inline byte NextByte();
-        inline ushort NextUShort();
+        inline Byte NextByte();
+        inline UShort NextUShort();
         inline Short NextShort();
         inline Int NextInt();
         inline Long NextLong();
+        inline ULong NextULong();
         inline Float NextFloat();
         inline Double NextDouble();
         inline Bool NextBool();
