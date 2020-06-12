@@ -55,6 +55,7 @@
 #define JGE    0x0206
 #define JL     0x0207
 #define JLE    0x0208
+#define RET    0x0209
 
 
 // operand stack operations

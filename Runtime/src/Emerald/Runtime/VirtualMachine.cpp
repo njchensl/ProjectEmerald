@@ -152,6 +152,16 @@ namespace Emerald
         }
         case CALL:
         {
+            m_LocalVariableStack.Push(m_Registers.rip);
+            byte* func = (byte*)m_OperandStacks.GetActive().PopULong();
+            m_Registers.ripPtr = func;
+            m_OperandStacks.Push();
+            break;
+        }
+        case RET:
+        {
+            m_OperandStacks.Pop();
+            m_Registers.ripPtr = m_LocalVariableStack.Pop<byte*>();
             break;
         }
         case CMP:

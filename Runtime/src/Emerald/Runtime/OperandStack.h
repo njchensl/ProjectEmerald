@@ -13,7 +13,14 @@ namespace Emerald
         }
 
         // push
-#define OPERAND_STACK_PUSH(type) void Push##type##(type val) { *(type*)m_StackPtr = val; m_StackPtr += sizeof type; } \
+        template<typename T>
+        void Push(T val)
+        {
+            *(T*)m_StackPtr = val;
+            m_StackPtr += sizeof T;
+        }
+
+#define OPERAND_STACK_PUSH(type) void Push##type##(type val) { Push<type>(val); } \
     OperandStack& operator<<(type val) { Push##type##(val); return *this; }
         OPERAND_STACK_PUSH(Byte)
         OPERAND_STACK_PUSH(UShort)
@@ -30,7 +37,14 @@ namespace Emerald
 #undef  OPERAND_STACK_PUSH
 
         // pop
-#define OPERAND_STACK_POP(type) type Pop##type##() { m_StackPtr -= sizeof(type); return *(type*)m_StackPtr; } \
+        template<typename T>
+        T Pop()
+        {
+            m_StackPtr -= sizeof T;
+            return *(T*)m_StackPtr;
+        }
+
+#define OPERAND_STACK_POP(type) type Pop##type##() { return Pop<type>(); } \
     OperandStack& operator>>(##type##& val) { val = Pop##type##(); return *this; }
 
         OPERAND_STACK_POP(Byte)

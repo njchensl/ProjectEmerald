@@ -27,7 +27,6 @@ namespace Emerald
     private:
         Registers m_Registers;
         byte* m_Data0;
-        OperandStack<1024> m_OperandStack;
         OperandStackStack m_OperandStacks;
         LocalVariableStack m_LocalVariableStack;
 

@@ -25,6 +25,20 @@ namespace Emerald
 
         LocalVariableStack& operator=(LocalVariableStack&& other) = delete;
 
+        template<typename T>
+        void Push(T val)
+        {
+            *(T*)m_Rsp = val;
+            m_Rsp += sizeof T;
+        }
+
+        template<typename T>
+        T Pop()
+        {
+            m_Rsp -= sizeof T;
+            return *(T*)m_Rsp;
+        }
+
     private:
         byte* m_BaseAddress;
         byte*& m_Rsp;
