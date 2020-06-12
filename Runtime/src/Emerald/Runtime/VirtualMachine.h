@@ -2,7 +2,12 @@
 
 #include <exception>
 
-#if 0
+
+
+#include "OperandStack.h"
+#include "Registers.h"
+#include "../Core.h"
+
 namespace Emerald
 {
     class UnknownInstructionError : std::exception {};
@@ -18,25 +23,18 @@ namespace Emerald
 
     class VirtualMachine final : public IVirtualMachine {
     private:
-        unsigned char* m_PC;
-        const unsigned char* m_PC0;
-        const unsigned char* m_Data0;
-        DataUnit* m_OperandStackBasePtr;
-        DataUnit* m_OperandStackPtr;
-        DataUnit m_OperandStack[1024];
+        Registers m_Registers;
+        byte* m_Data0;
+        OperandStack<1024> m_OperandStack;
 
-        inline unsigned char NextByte();
+        inline byte NextByte();
+        inline ushort NextUShort();
+        inline Int NextInt();
+        inline Long NextLong();
 
-        inline long long NextInt();
-
-        inline DataUnit OperandPeek();
-
-        inline void OperandPush(const DataUnit& du);
-
-        inline DataUnit OperandPop();
 
     public:
-        explicit VirtualMachine(unsigned char*);
+        explicit VirtualMachine(byte*);
 
         ~VirtualMachine() override;
 
@@ -44,5 +42,3 @@ namespace Emerald
     };
 }
 
-
-#endif

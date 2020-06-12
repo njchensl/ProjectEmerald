@@ -1,5 +1,7 @@
 ﻿#pragma once
 #include <cstdint>
+#include <bitset>
+#include "../Core.h"
 
 namespace Emerald
 {
@@ -42,6 +44,12 @@ namespace Emerald
         REGISTER_SPECIAL(bp)
 
         REGISTER_SPECIAL(ip)
+
+        std::bitset<sizeof(ulong)> Flags;
+
+        static constexpr ulong ZF = 1 << 0;
+        static constexpr ulong SF = 1 << 1;
+        static constexpr ulong OF = 1 << 2; // future ues
 
         //REGISTER_8_TO_15(8)
         //REGISTER_8_TO_15(9)
