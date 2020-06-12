@@ -95,6 +95,30 @@ namespace Emerald
             return *this;
         }
 
+        void PushChar(Char c)
+        {
+            *(Char*)m_StackPtr = c;
+            m_StackPtr += sizeof Char;
+        }
+
+        OperandStack& operator<<(Char c)
+        {
+            PushChar(c);
+            return *this;
+        }
+
+        void PushBool(bool b)
+        {
+            *(bool*)m_StackPtr = b;
+            m_StackPtr += sizeof(bool);
+        }
+
+        OperandStack& operator<<(bool b)
+        {
+            PushBool(b);
+            return *this;
+        }
+
         // pop
         byte PopByte()
         {
@@ -213,6 +237,30 @@ namespace Emerald
         OperandStack& operator>>(double& l)
         {
             l = PopDouble();
+            return *this;
+        }
+
+        Char PopChar()
+        {
+            m_StackPtr -= sizeof Char;
+            return *(Char*)m_StackPtr;
+        }
+
+        OperandStack& operator>>(Char& c)
+        {
+            c = PopChar();
+            return *this;
+        }
+
+        bool PopBool()
+        {
+            m_StackPtr -= sizeof(bool);
+            return *(bool*)m_StackPtr;
+        }
+
+        OperandStack& operator>>(bool& b)
+        {
+            b = PopBool();
             return *this;
         }
 
