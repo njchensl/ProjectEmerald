@@ -39,11 +39,44 @@ namespace Emerald
         //REGISTER_A_TO_D(d)
         //REGISTER_SPECIAL(si)
         //REGISTER_SPECIAL(di)
-        REGISTER_SPECIAL(sp)
+        union
+        {
+            byte spl;
+            ushort sp;
+            uint esp;
 
-        REGISTER_SPECIAL(bp)
+            union
+            {
+                ulong rsp;
+                byte* rspPtr;
+            };
+        };
 
-        REGISTER_SPECIAL(ip)
+        union
+        {
+            byte bpl;
+            ushort bp;
+            uint ebp;
+
+            union
+            {
+                ulong rbp;
+                byte* rbpPtr;
+            };
+        };
+
+        union
+        {
+            byte ipl;
+            ushort ip;
+            uint eip;
+
+            union
+            {
+                ulong rip;
+                byte* ripPtr;
+            };
+        };
 
         std::bitset<sizeof(ulong)> Flags;
 

@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include <cstddef>
 
 #ifdef EM_DEBUG
 #define EM_ENABLE_ASSERTS
@@ -30,3 +31,9 @@ typedef int64_t Long;
 
 typedef wchar_t Char;
 typedef wchar_t Character;
+
+typedef float Float;
+typedef double Double;
+
+typedef bool Bool;
+typedef bool Boolean;

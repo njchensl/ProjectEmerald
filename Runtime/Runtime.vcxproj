@@ -177,6 +177,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Emerald\Runtime\LocalVariableStack.h" />
     <ClInclude Include="src\Emerald\Runtime\OperandStack.h" />
     <ClInclude Include="src\Emerald\Core.h" />
     <ClInclude Include="src\Emerald\Disassembler.h" />
@@ -185,6 +186,7 @@
     <ClInclude Include="src\Emerald\Runtime\VirtualMachine.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Emerald\Runtime\LocalVariableStack.cpp" />
     <ClCompile Include="src\Emerald\Disassembler.cpp" />
     <ClCompile Include="src\Emerald\Runtime\Registers.cpp" />
     <ClCompile Include="src\Emerald\Runtime\VirtualMachine.cpp" />

@@ -5,7 +5,7 @@
 
 namespace Emerald
 {
-    VirtualMachine::VirtualMachine(byte* p0)
+    VirtualMachine::VirtualMachine(byte* p0) : m_LocalVariableStack(1 << 23, &m_Registers.rspPtr, &m_Registers.rbpPtr)
     {
         m_Registers.rip = (ulong)p0;
         unsigned long long codeOffset = NextLong();
@@ -19,6 +19,11 @@ namespace Emerald
         ushort instruction = NextUShort();
         switch (instruction)
         {
+#define ADD_OPERATION(name, type) case name: { type var0 = m_OperandStack.Pop##type##();  \
+    type var1 = m_OperandStack.Pop##type##(); \
+    m_OperandStack.Push##type##((type)(var0 + var1));\
+    break; }
+
         case BADD:
         {
             byte var0 = m_OperandStack.PopByte();
@@ -26,139 +31,115 @@ namespace Emerald
             m_OperandStack.PushByte((byte)((uint)var0 + (uint)var1));
             break;
         }
-        case SADD:
-        {
-            Short var0 = m_OperandStack.PopShort();
-            Short var1 = m_OperandStack.PopShort();
-            m_OperandStack.PushShort((Short)(var0 + var1));
-            break;
-        }
-        case IADD:
-        {
-            Int var0 = m_OperandStack.PopInt();
-            Int var1 = m_OperandStack.PopInt();
-            m_OperandStack.PushInt((Int)(var0 + var1));
-            break;
-        }
-        case JADD:
-        {
-            Long var0 = m_OperandStack.PopLong();
-            Long var1 = m_OperandStack.PopLong();
-            m_OperandStack.PushLong((Long)(var0 + var1));
-            break;
-        }
-        case FADD:
-        {
-            float var0 = m_OperandStack.PopFloat();
-            float var1 = m_OperandStack.PopFloat();
-            m_OperandStack.PushFloat(var0 + var1);
-            break;
-        }
-        case DADD:
-        {
-            double var0 = m_OperandStack.PopDouble();
-            double var1 = m_OperandStack.PopDouble();
-            m_OperandStack.PushDouble(var0 + var1);
-            break;
-        }
+        ADD_OPERATION(SADD, Short)
+        ADD_OPERATION(IADD, Int)
+        ADD_OPERATION(JADD, Long)
+        ADD_OPERATION(FADD, Float)
+        ADD_OPERATION(DADD, Double)
+
+#undef ADD_OPERATION
+#define SUB_OPERATION(name, type) case name: {  type var1 = m_OperandStack.Pop##type##(); \
+    type var0 = m_OperandStack.Pop##type##(); \
+    m_OperandStack.Push##type##((type)(var0 - var1));\
+    break; }
+
         case BSUB:
         {
+            Byte var1 = m_OperandStack.PopByte();
+            Byte var0 = m_OperandStack.PopByte();
+            m_OperandStack.PushByte((Byte)((Short)var0 - (Short)var1));
             break;
         }
-        case SSUB:
-        {
-            break;
-        }
-        case ISUB:
-        {
-            break;
-        }
-        case JSUB:
-        {
-            break;
-        }
-        case FSUB:
-        {
-            break;
-        }
-        case DSUB:
-        {
-            break;
-        }
+        SUB_OPERATION(SSUB, Short)
+        SUB_OPERATION(ISUB, Int)
+        SUB_OPERATION(JSUB, Long)
+        SUB_OPERATION(FSUB, Float)
+        SUB_OPERATION(DSUB, Double)
+
+#undef SUB_OPERATION
+
+#define MUL_OPERATION(name, type) case name: { type var0 = m_OperandStack.Pop##type##();  \
+    type var1 = m_OperandStack.Pop##type##(); \
+    m_OperandStack.Push##type##((type)(var0 * var1));\
+    break; }
+
         case BMUL:
         {
+            Byte var0 = m_OperandStack.PopByte();
+            Byte var1 = m_OperandStack.PopByte();
+            m_OperandStack.PushByte((Byte)((Short)var0 * (Short)var1));
             break;
         }
-        case SMUL:
-        {
-            break;
-        }
-        case IMUL:
-        {
-            break;
-        }
-        case JMUL:
-        {
-            break;
-        }
-        case FMUL:
-        {
-            break;
-        }
-        case DMUL:
-        {
-            break;
-        }
+        MUL_OPERATION(SMUL, Short)
+        MUL_OPERATION(IMUL, Int)
+        MUL_OPERATION(JMUL, Long)
+        MUL_OPERATION(FMUL, Float)
+        MUL_OPERATION(DMUL, Double)
+
+#undef MUL_OPERATION
+#define DIV_OPERATION(name, type) case name: {  type var1 = m_OperandStack.Pop##type##(); \
+    type var0 = m_OperandStack.Pop##type##(); \
+    m_OperandStack.Push##type##((type)(var0 / var1));\
+    break; }
         case BDIV:
         {
+            Byte var1 = m_OperandStack.PopByte();
+            Byte var0 = m_OperandStack.PopByte();
+            m_OperandStack.PushByte((Byte)((Short)var0 / (Short)var1));
             break;
         }
-        case SDIV:
-        {
-            break;
-        }
-        case IDIV:
-        {
-            break;
-        }
-        case JDIV:
-        {
-            break;
-        }
-        case FDIV:
-        {
-            break;
-        }
-        case DDIV:
-        {
-            break;
-        }
+        DIV_OPERATION(SDIV, Short)
+        DIV_OPERATION(IDIV, Int)
+        DIV_OPERATION(JDIV, Long)
+        DIV_OPERATION(FDIV, Float)
+        DIV_OPERATION(DDIV, Double)
+#undef DIV_OPERATION
         case ZAND:
         {
+            Bool var0 = m_OperandStack.PopBool();
+            Bool var1 = m_OperandStack.PopBool();
+            m_OperandStack.PushBool(var0 && var1);
             break;
         }
         case ZOR:
         {
+            Bool var0 = m_OperandStack.PopBool();
+            Bool var1 = m_OperandStack.PopBool();
+            m_OperandStack.PushBool(var0 || var1);
             break;
         }
         case ZNOT:
         {
+            Bool var0 = m_OperandStack.PopBool();
+            m_OperandStack.PushBool(!var0);
             break;
         }
         case ZNAND:
         {
+            Bool var0 = m_OperandStack.PopBool();
+            Bool var1 = m_OperandStack.PopBool();
+            m_OperandStack.PushBool(!(var0 && var1));
             break;
         }
         case ZNOR:
         {
+            Bool var0 = m_OperandStack.PopBool();
+            Bool var1 = m_OperandStack.PopBool();
+            m_OperandStack.PushBool(!(var0 || var1));
             break;
         }
         case ZXOR:
         {
+            Bool var0 = m_OperandStack.PopBool();
+            Bool var1 = m_OperandStack.PopBool();
+            m_OperandStack.PushBool((bool)((byte)var0 ^ (byte)var1));
             break;
         }
         case ZXNOR:
         {
+            Bool var0 = m_OperandStack.PopBool();
+            Bool var1 = m_OperandStack.PopBool();
+            m_OperandStack.PushBool(!(bool)((byte)var0 ^ (byte)var1));
             break;
         }
         case JMP:
@@ -322,6 +303,26 @@ namespace Emerald
             break;
         }
         case CPUT:
+        {
+            break;
+        }
+        case ACCRIP:
+        {
+            break;
+        }
+        case ACCRSP:
+        {
+            break;
+        }
+        case ACCRBP:
+        {
+            break;
+        }
+        case PUTRSP:
+        {
+            break;
+        }
+        case PUTRBP:
         {
             break;
         }

@@ -19,7 +19,6 @@ int main(int argc, char** argv)
 {
     using namespace Emerald;
     OperandStack<100> stack;
-
 #if 0
 
 
