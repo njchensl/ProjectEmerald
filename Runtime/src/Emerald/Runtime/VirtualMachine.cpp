@@ -147,6 +147,7 @@ namespace Emerald
             // control flow and functions
         case JMP:
         {
+            m_Registers.ripPtr = (byte*)m_OperandStack.PopULong();
             break;
         }
         case CALL:
@@ -204,70 +205,30 @@ namespace Emerald
         OPERAND_STACK_POP_OPERATION(CPOP, Char)
 #undef  OPERAND_STACK_POP_OPERATION
 
-        case BLOAD:
-        {
-            break;
-        }
-        case SLOAD:
-        {
-            break;
-        }
-        case ILOAD:
-        {
-            break;
-        }
-        case JLOAD:
-        {
-            break;
-        }
-        case FLOAD:
-        {
-            break;
-        }
-        case DLOAD:
-        {
-            break;
-        }
-        case ZLOAD:
-        {
-            break;
-        }
-        case CLOAD:
-        {
-            break;
-        }
-        case BPUT:
-        {
-            break;
-        }
-        case SPUT:
-        {
-            break;
-        }
-        case IPUT:
-        {
-            break;
-        }
-        case JPUT:
-        {
-            break;
-        }
-        case FPUT:
-        {
-            break;
-        }
-        case DPUT:
-        {
-            break;
-        }
-        case ZPUT:
-        {
-            break;
-        }
-        case CPUT:
-        {
-            break;
-        }
+            // load from address
+#define OPERAND_STACK_LOAD_FROM_ADDRESS_OPERATION(name, type) case name : { auto* ptr = (type*)m_OperandStack.PopULong(); m_OperandStack.Push##type##(*ptr); break; }
+        OPERAND_STACK_LOAD_FROM_ADDRESS_OPERATION(BLOAD, Byte)
+        OPERAND_STACK_LOAD_FROM_ADDRESS_OPERATION(SLOAD, Short)
+        OPERAND_STACK_LOAD_FROM_ADDRESS_OPERATION(ILOAD, Int)
+        OPERAND_STACK_LOAD_FROM_ADDRESS_OPERATION(JLOAD, Long)
+        OPERAND_STACK_LOAD_FROM_ADDRESS_OPERATION(FLOAD, Float)
+        OPERAND_STACK_LOAD_FROM_ADDRESS_OPERATION(DLOAD, Double)
+        OPERAND_STACK_LOAD_FROM_ADDRESS_OPERATION(ZLOAD, Bool)
+        OPERAND_STACK_LOAD_FROM_ADDRESS_OPERATION(CLOAD, Char)
+#undef  OPERAND_STACK_LOAD_FROM_ADDRESS_OPERATION
+
+            // put into address
+#define OPERAND_STACK_PUT_INTO_ADDRESS_OPERATION(name, type) case name : { type data = m_OperandStack.Pop##type##(); auto* ptr = (type*)m_OperandStack.PopULong(); *ptr = data; break; }
+        OPERAND_STACK_PUT_INTO_ADDRESS_OPERATION(BPUT, Byte)
+        OPERAND_STACK_PUT_INTO_ADDRESS_OPERATION(SPUT, Short)
+        OPERAND_STACK_PUT_INTO_ADDRESS_OPERATION(IPUT, Int)
+        OPERAND_STACK_PUT_INTO_ADDRESS_OPERATION(JPUT, Long)
+        OPERAND_STACK_PUT_INTO_ADDRESS_OPERATION(FPUT, Float)
+        OPERAND_STACK_PUT_INTO_ADDRESS_OPERATION(DPUT, Double)
+        OPERAND_STACK_PUT_INTO_ADDRESS_OPERATION(ZPUT, Bool)
+        OPERAND_STACK_PUT_INTO_ADDRESS_OPERATION(CPUT, Char)
+#undef  OPERAND_STACK_PUT_INTO_ADDRESS_OPERATION
+
             // registers
         case ACCRIP:
         {
