@@ -32,7 +32,6 @@ namespace Emerald
         inline Int NextInt();
         inline Long NextLong();
 
-
     public:
         explicit VirtualMachine(byte*);
 

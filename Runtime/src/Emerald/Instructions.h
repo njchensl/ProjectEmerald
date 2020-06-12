@@ -45,7 +45,7 @@
 #define ZXNOR 0x0106
 
 // control flow
-//            0x02xx
+//            0x020x
 #define JMP   0x0200
 #define CALL  0x0201
 #define CMP   0x0202
@@ -55,3 +55,38 @@
 #define JGE   0x0206
 #define JL    0x0207
 #define JLE   0x0208
+
+// operand stack operations
+//            0x022x
+#define BPUSH 0x0220
+#define SPUSH 0x0221
+#define IPUSH 0x0222
+#define JPUSH 0x0223
+#define FPUSH 0x0224
+#define DPUSH 0x0225
+#define ZPUSH 0x0226
+#define CPUSH 0x0227
+#define BPOP  0x0230
+#define SPOP  0x0231
+#define IPOP  0x0232
+#define JPOP  0x0233
+#define FPOP  0x0234
+#define DPOP  0x0235
+#define ZPOP  0x0236
+#define CPOP  0x0237
+#define BLOAD 0x0240
+#define SLOAD 0x0241
+#define ILOAD 0x0242
+#define JLOAD 0x0243
+#define FLOAD 0x0244
+#define DLOAD 0x0245
+#define ZLOAD 0x0246
+#define CLOAD 0x0247
+#define BPUT  0x0250
+#define SPUT  0x0251
+#define IPUT  0x0252
+#define JPUT  0x0253
+#define FPUT  0x0254
+#define DPUT  0x0255
+#define ZPUT  0x0256
+#define CPUT  0x0257
