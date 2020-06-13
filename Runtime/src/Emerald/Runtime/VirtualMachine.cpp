@@ -1,5 +1,6 @@
 #include "VirtualMachine.h"
 
+#include <cmath>
 #include "../Core.h"
 #include "../Instructions.h"
 
@@ -24,7 +25,11 @@ namespace Emerald
     type var1 = m_OperandStacks.GetActive().Pop##type##(); \
     m_OperandStacks.GetActive().Push##type##((type)(var0 + var1));\
     break; }
-
+        case NOP:
+        {
+            // nop / padding
+            break;
+        }
         case BADD:
         {
             byte var0 = m_OperandStacks.GetActive().PopByte();
@@ -164,32 +169,86 @@ namespace Emerald
             m_Registers.ripPtr = m_LocalVariableStack.Pop<byte*>();
             break;
         }
-        case CMP:
+#define COMP_OPERATION_FLOAT(name, type) case name : { \
+    \
+    type var1 = m_OperandStacks.GetActive().Pop##type##(); \
+    type var0 = m_OperandStacks.GetActive().Pop##type##(); \
+    type result = var0 - var1; \
+    m_Registers.SetZF(var0 == var1); \
+    m_Registers.SetSF(std::signbit(result));\
+    break; }
+#define COMP_OPERATION_INT(name, type) case name : { \
+    \
+    type var1 = m_OperandStacks.GetActive().Pop##type##(); \
+    type var0 = m_OperandStacks.GetActive().Pop##type##(); \
+    type result = var0 - var1; \
+    m_Registers.SetZF(var0 == var1); \
+    m_Registers.SetSF(result < 0);\
+    break; }
+        case BCMP:
         {
+            Short var1 = (Short)m_OperandStacks.GetActive().PopByte();
+            Short var0 = (Short)m_OperandStacks.GetActive().PopByte();
+            Short result = var0 - var1;
+            m_Registers.SetZF(var0 == var1);
+            m_Registers.SetSF(result < 0);
             break;
         }
+        COMP_OPERATION_INT(SCMP, Short)
+        COMP_OPERATION_INT(ICMP, Int)
+        COMP_OPERATION_INT(JCMP, Long)
+        COMP_OPERATION_FLOAT(FCMP, Float)
+        COMP_OPERATION_FLOAT(DCMP, Double)
+
+#undef COMP_OPERATION_INT
+#undef COMP_OPERATION_FLOAT
+
         case JE:
         {
+            if (m_Registers.GetZF())
+            {
+                m_Registers.rip = m_OperandStacks.GetActive().PopULong();
+            }
             break;
         }
         case JNE:
         {
+            if (!m_Registers.GetZF())
+            {
+                m_Registers.rip = m_OperandStacks.GetActive().PopULong();
+            }
             break;
         }
         case JG:
         {
+            if (!m_Registers.GetZF() && !m_Registers.GetSF())
+            {
+                m_Registers.rip = m_OperandStacks.GetActive().PopULong();
+            }
             break;
         }
         case JGE:
         {
+            if (m_Registers.GetZF() || !m_Registers.GetSF())
+            {
+                m_Registers.rip = m_OperandStacks.GetActive().PopULong();
+            }
             break;
         }
         case JL:
         {
+            if (!m_Registers.GetZF() && m_Registers.GetSF())
+            {
+                m_Registers.rip = m_OperandStacks.GetActive().PopULong();
+            }
             break;
         }
         case JLE:
         {
+            if (m_Registers.GetZF() || m_Registers.GetSF())
+            {
+                m_Registers.rip = m_OperandStacks.GetActive().PopULong();
+            }
             break;
         }
             // operand stack operations
@@ -215,17 +274,17 @@ namespace Emerald
         OPERAND_STACK_POP_OPERATION(CPOP, Char)
 #undef  OPERAND_STACK_POP_OPERATION
 
-            // load from address
-#define OPERAND_STACK_LOAD_FROM_ADDRESS_OPERATION(name, type) case name : { auto* ptr = (type*)m_OperandStacks.GetActive().PopULong(); m_OperandStacks.GetActive().Push##type##(*ptr); break; }
-        OPERAND_STACK_LOAD_FROM_ADDRESS_OPERATION(BLOAD, Byte)
-        OPERAND_STACK_LOAD_FROM_ADDRESS_OPERATION(SLOAD, Short)
-        OPERAND_STACK_LOAD_FROM_ADDRESS_OPERATION(ILOAD, Int)
-        OPERAND_STACK_LOAD_FROM_ADDRESS_OPERATION(JLOAD, Long)
-        OPERAND_STACK_LOAD_FROM_ADDRESS_OPERATION(FLOAD, Float)
-        OPERAND_STACK_LOAD_FROM_ADDRESS_OPERATION(DLOAD, Double)
-        OPERAND_STACK_LOAD_FROM_ADDRESS_OPERATION(ZLOAD, Bool)
-        OPERAND_STACK_LOAD_FROM_ADDRESS_OPERATION(CLOAD, Char)
-#undef  OPERAND_STACK_LOAD_FROM_ADDRESS_OPERATION
+            // get from address
+#define OPERAND_STACK_GET_FROM_ADDRESS_OPERATION(name, type) case name : { auto* ptr = (type*)m_OperandStacks.GetActive().PopULong(); m_OperandStacks.GetActive().Push##type##(*ptr); break; }
+        OPERAND_STACK_GET_FROM_ADDRESS_OPERATION(BGET, Byte)
+        OPERAND_STACK_GET_FROM_ADDRESS_OPERATION(SGET, Short)
+        OPERAND_STACK_GET_FROM_ADDRESS_OPERATION(IGET, Int)
+        OPERAND_STACK_GET_FROM_ADDRESS_OPERATION(JGET, Long)
+        OPERAND_STACK_GET_FROM_ADDRESS_OPERATION(FGET, Float)
+        OPERAND_STACK_GET_FROM_ADDRESS_OPERATION(DGET, Double)
+        OPERAND_STACK_GET_FROM_ADDRESS_OPERATION(ZGET, Bool)
+        OPERAND_STACK_GET_FROM_ADDRESS_OPERATION(CGET, Char)
+#undef  OPERAND_STACK_GET_FROM_ADDRESS_OPERATION
 
             // put into address
 #define OPERAND_STACK_PUT_INTO_ADDRESS_OPERATION(name, type) case name : { type data = m_OperandStacks.GetActive().Pop##type##(); auto* ptr = (type*)m_OperandStacks.GetActive().PopULong(); *ptr = data; break; }

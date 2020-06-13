@@ -1,5 +1,7 @@
 #pragma once
 
+#define NOP    0xFFFF
+
 // arithmetic operators
 //             0x00xx
 //       ADD   0x000x
@@ -48,14 +50,20 @@
 //             0x020x
 #define JMP    0x0200
 #define CALL   0x0201
-#define CMP    0x0202
-#define JE     0x0203
-#define JNE    0x0204
-#define JG     0x0205
-#define JGE    0x0206
-#define JL     0x0207
-#define JLE    0x0208
-#define RET    0x0209
+#define JE     0x0202
+#define JNE    0x0203
+#define JG     0x0204
+#define JGE    0x0205
+#define JL     0x0206
+#define JLE    0x0207
+#define RET    0x0208
+#define BCMP   0x0209
+#define SCMP   0x020A
+#define ICMP   0x020B
+#define JCMP   0x020C
+#define FCMP   0x020D
+#define DCMP   0x020E
+
 
 
 // operand stack operations
@@ -77,14 +85,14 @@
 #define ZPOP   0x0236
 #define CPOP   0x0237
 // local var stack operations
-#define BLOAD  0x0240
-#define SLOAD  0x0241
-#define ILOAD  0x0242
-#define JLOAD  0x0243
-#define FLOAD  0x0244
-#define DLOAD  0x0245
-#define ZLOAD  0x0246
-#define CLOAD  0x0247
+#define BGET   0x0240
+#define SGET   0x0241
+#define IGET   0x0242
+#define JGET   0x0243
+#define FGET   0x0244
+#define DGET   0x0245
+#define ZGET   0x0246
+#define CGET   0x0247
 #define BPUT   0x0250
 #define SPUT   0x0251
 #define IPUT   0x0252
@@ -93,6 +101,7 @@
 #define DPUT   0x0255
 #define ZPUT   0x0256
 #define CPUT   0x0257
+// load effective address
 
 // register access
 //             0x030x

@@ -78,11 +78,22 @@ namespace Emerald
             };
         };
 
-        std::bitset<sizeof(ulong)> Flags;
+        void ClearFlags();
 
-        static constexpr ulong ZF = 1 << 0;
-        static constexpr ulong SF = 1 << 1;
-        static constexpr ulong OF = 1 << 2; // future ues
+        Bool GetZF() const;
+
+        Bool GetSF() const;
+
+        void SetZF(Bool val);
+
+        void SetSF(Bool val);
+
+    private:
+        std::bitset<sizeof(ulong)> m_Flags;
+
+        static constexpr size_t ZF = 0;
+        static constexpr size_t SF = 1;
+        static constexpr size_t OF = 2; // future ues
 
         //REGISTER_8_TO_15(8)
         //REGISTER_8_TO_15(9)
