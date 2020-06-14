@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstring>
+
 #include "../Core.h"
 
 namespace Emerald
@@ -18,6 +20,12 @@ namespace Emerald
         {
             *(T*)m_StackPtr = val;
             m_StackPtr += sizeof T;
+        }
+
+        void Push(size_t size, void* data)
+        {
+            memcpy(m_StackPtr, data, size);
+            m_StackPtr += size;
         }
 
 #define OPERAND_STACK_PUSH(type) void Push##type##(type val) { Push<type>(val); } \
@@ -43,6 +51,8 @@ namespace Emerald
             m_StackPtr -= sizeof T;
             return *(T*)m_StackPtr;
         }
+
+
 
 #define OPERAND_STACK_POP(type) type Pop##type##() { return Pop<type>(); } \
     OperandStack& operator>>(##type##& val) { val = Pop##type##(); return *this; }

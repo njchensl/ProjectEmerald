@@ -41,41 +41,70 @@ namespace Emerald
         //REGISTER_SPECIAL(di)
         union
         {
-            byte spl;
-            ushort sp;
-            uint esp;
-
-            union
+            struct
             {
-                ulong rsp;
-                byte* rspPtr;
+                union
+                {
+                    const uint e0;
+
+                    union {
+                        const ulong r0;
+                        byte* const r0Ptr;
+                    };
+                };
+
+                union
+                {
+                    uint ep0;
+
+                    union
+                    {
+                        ulong rp0;
+                        byte* rp0Ptr;
+                    };
+                };
+
+                union
+                {
+                    byte spl;
+                    ushort sp;
+                    uint esp;
+
+                    union
+                    {
+                        ulong rsp;
+                        byte* rspPtr;
+                    };
+                };
+
+                union
+                {
+                    byte bpl;
+                    ushort bp;
+                    uint ebp;
+
+                    union
+                    {
+                        ulong rbp;
+                        byte* rbpPtr;
+                    };
+                };
+
+                union
+                {
+                    byte ipl;
+                    ushort ip;
+                    uint eip;
+
+                    union
+                    {
+                        ulong rip;
+                        byte* ripPtr;
+                    };
+                };
             };
-        };
 
-        union
-        {
-            byte bpl;
-            ushort bp;
-            uint ebp;
-
-            union
-            {
-                ulong rbp;
-                byte* rbpPtr;
-            };
-        };
-
-        union
-        {
-            byte ipl;
-            ushort ip;
-            uint eip;
-
-            union
-            {
-                ulong rip;
-                byte* ripPtr;
-            };
+            ulong SpecialRegisters[5];
         };
 
         void ClearFlags();

@@ -12,6 +12,7 @@ namespace Emerald
         ulong codeOffset = NextULong();
         ulong dataOffset = NextULong();
         m_Registers.rip = codeOffset + (ulong)p0;
+        m_Registers.rp0 = m_Registers.rip;
         m_Data0 = p0 + dataOffset;
     }
 
@@ -275,28 +276,75 @@ namespace Emerald
 #undef  OPERAND_STACK_POP_OPERATION
 
             // get from address
-#define OPERAND_STACK_GET_FROM_ADDRESS_OPERATION(name, type) case name : { auto* ptr = (type*)m_OperandStacks.GetActive().PopULong(); m_OperandStacks.GetActive().Push##type##(*ptr); break; }
-        OPERAND_STACK_GET_FROM_ADDRESS_OPERATION(BGET, Byte)
-        OPERAND_STACK_GET_FROM_ADDRESS_OPERATION(SGET, Short)
-        OPERAND_STACK_GET_FROM_ADDRESS_OPERATION(IGET, Int)
-        OPERAND_STACK_GET_FROM_ADDRESS_OPERATION(JGET, Long)
-        OPERAND_STACK_GET_FROM_ADDRESS_OPERATION(FGET, Float)
-        OPERAND_STACK_GET_FROM_ADDRESS_OPERATION(DGET, Double)
-        OPERAND_STACK_GET_FROM_ADDRESS_OPERATION(ZGET, Bool)
-        OPERAND_STACK_GET_FROM_ADDRESS_OPERATION(CGET, Char)
-#undef  OPERAND_STACK_GET_FROM_ADDRESS_OPERATION
+#define GET_FROM_ADDRESS_OPERATION(name, type) case name : { auto* ptr = (type*)m_OperandStacks.GetActive().PopULong(); m_OperandStacks.GetActive().Push##type##(*ptr); break; }
+        GET_FROM_ADDRESS_OPERATION(BGET, Byte)
+        GET_FROM_ADDRESS_OPERATION(SGET, Short)
+        GET_FROM_ADDRESS_OPERATION(IGET, Int)
+        GET_FROM_ADDRESS_OPERATION(JGET, Long)
+        GET_FROM_ADDRESS_OPERATION(FGET, Float)
+        GET_FROM_ADDRESS_OPERATION(DGET, Double)
+        GET_FROM_ADDRESS_OPERATION(ZGET, Bool)
+        GET_FROM_ADDRESS_OPERATION(CGET, Char)
+#undef  GET_FROM_ADDRESS_OPERATION
 
             // put into address
-#define OPERAND_STACK_PUT_INTO_ADDRESS_OPERATION(name, type) case name : { type data = m_OperandStacks.GetActive().Pop##type##(); auto* ptr = (type*)m_OperandStacks.GetActive().PopULong(); *ptr = data; break; }
-        OPERAND_STACK_PUT_INTO_ADDRESS_OPERATION(BPUT, Byte)
-        OPERAND_STACK_PUT_INTO_ADDRESS_OPERATION(SPUT, Short)
-        OPERAND_STACK_PUT_INTO_ADDRESS_OPERATION(IPUT, Int)
-        OPERAND_STACK_PUT_INTO_ADDRESS_OPERATION(JPUT, Long)
-        OPERAND_STACK_PUT_INTO_ADDRESS_OPERATION(FPUT, Float)
-        OPERAND_STACK_PUT_INTO_ADDRESS_OPERATION(DPUT, Double)
-        OPERAND_STACK_PUT_INTO_ADDRESS_OPERATION(ZPUT, Bool)
-        OPERAND_STACK_PUT_INTO_ADDRESS_OPERATION(CPUT, Char)
-#undef  OPERAND_STACK_PUT_INTO_ADDRESS_OPERATION
+#define PUT_INTO_ADDRESS_OPERATION(name, type) case name : { type data = m_OperandStacks.GetActive().Pop##type##(); auto* ptr = (type*)m_OperandStacks.GetActive().PopULong(); *ptr = data; break; }
+        PUT_INTO_ADDRESS_OPERATION(BPUT, Byte)
+        PUT_INTO_ADDRESS_OPERATION(SPUT, Short)
+        PUT_INTO_ADDRESS_OPERATION(IPUT, Int)
+        PUT_INTO_ADDRESS_OPERATION(JPUT, Long)
+        PUT_INTO_ADDRESS_OPERATION(FPUT, Float)
+        PUT_INTO_ADDRESS_OPERATION(DPUT, Double)
+        PUT_INTO_ADDRESS_OPERATION(ZPUT, Bool)
+        PUT_INTO_ADDRESS_OPERATION(CPUT, Char)
+#undef  PUT_INTO_ADDRESS_OPERATION
+            // load from offset
+        case LDO:
+        {
+            // 0xLDO       - aa                      - bb                   - cccccccc - dd
+            // instruction - offset from (register)  - arithmetic operation - offset   - size
+            //      00: 0
+            //      01: 
+            // calculatedOffset = aa +/- cccccccc
+            //                       bb
+            ushort fromRegister = NextUShort();
+            ulong offsetFrom = m_Registers.SpecialRegisters[fromRegister];
+            ushort op = NextUShort();
+            ulong offset = NextULong();
+            byte size = NextByte();
+            ulong result = 0;
+            if (op == 0)
+            {
+                // +
+                result = offsetFrom + offset;
+            }
+            else if (op == 1)
+            {
+                // -
+                result = offsetFrom - offset;
+            }
+            m_OperandStacks.GetActive().Push((size_t)size, (void*)result);
+            break;
+        }
+            // load effective address
+        case LEA:
+        {
+            ushort fromRegister = NextUShort();
+            ulong offsetFrom = m_Registers.SpecialRegisters[fromRegister];
+            ushort op = NextUShort();
+            ulong offset = NextULong();
+            ulong result = 0;
+            if (op == 0) {
+                // +
+                result = offsetFrom + offset;
+            }
+            else if (op == 1) {
+                // -
+                result = offsetFrom - offset;
+            }
+            m_OperandStacks.GetActive().Push((void*)result);
+            break;
+        }
 
             // registers
         case ACCRIP:

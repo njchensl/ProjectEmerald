@@ -84,7 +84,7 @@
 #define DPOP   0x0235
 #define ZPOP   0x0236
 #define CPOP   0x0237
-// local var stack operations
+// pointer operations
 #define BGET   0x0240
 #define SGET   0x0241
 #define IGET   0x0242
@@ -101,6 +101,11 @@
 #define DPUT   0x0255
 #define ZPUT   0x0256
 #define CPUT   0x0257
+// local var stack operations with arithmetic
+//             0x026x
+#define LDO    0x0260
+#define LEA    0x0261
+
 // load effective address
 
 // register access
