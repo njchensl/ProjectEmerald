@@ -307,18 +307,18 @@ namespace Emerald
             //      01: 
             // calculatedOffset = aa +/- cccccccc
             //                       bb
-            ushort fromRegister = NextUShort();
-            ulong offsetFrom = m_Registers.SpecialRegisters[fromRegister];
-            ushort op = NextUShort();
+            byte fromRegister = NextByte();
+            ulong offsetFrom = m_Registers.SpecialRegisters[(uint8_t)fromRegister];
+            byte op = NextByte();
             ulong offset = NextULong();
             byte size = NextByte();
             ulong result = 0;
-            if (op == 0)
+            if ((uint8_t)op == 0)
             {
                 // +
                 result = offsetFrom + offset;
             }
-            else if (op == 1)
+            else if ((uint8_t)op == 1)
             {
                 // -
                 result = offsetFrom - offset;
@@ -329,16 +329,18 @@ namespace Emerald
             // load effective address
         case LEA:
         {
-            ushort fromRegister = NextUShort();
-            ulong offsetFrom = m_Registers.SpecialRegisters[fromRegister];
-            ushort op = NextUShort();
+            byte fromRegister = NextByte();
+            ulong offsetFrom = m_Registers.SpecialRegisters[(uint8_t)fromRegister];
+            byte op = NextByte();
             ulong offset = NextULong();
             ulong result = 0;
-            if (op == 0) {
+            if ((uint8_t)op == 0)
+            {
                 // +
                 result = offsetFrom + offset;
             }
-            else if (op == 1) {
+            else if ((uint8_t)op == 1)
+            {
                 // -
                 result = offsetFrom - offset;
             }
