@@ -6,7 +6,7 @@ namespace Emerald
 {
     Registers::Registers()
     {
-        memset(this, 0, sizeof Registers);
+        memset(this, 0, sizeof(Registers));
     }
 
     void Registers::ClearFlags()

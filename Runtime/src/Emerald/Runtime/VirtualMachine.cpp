@@ -22,9 +22,9 @@ namespace Emerald
         switch (instruction)
         {
             // arithmetic operations
-#define ADD_OPERATION(name, type) case name: { type var0 = m_OperandStacks.GetActive().Pop##type##();  \
-    type var1 = m_OperandStacks.GetActive().Pop##type##(); \
-    m_OperandStacks.GetActive().Push##type##((type)(var0 + var1));\
+#define ADD_OPERATION(name, type) case name: { type var0 = m_OperandStacks.GetActive().Pop##type ();  \
+    type var1 = m_OperandStacks.GetActive().Pop##type (); \
+    m_OperandStacks.GetActive().Push##type ((type)(var0 + var1));\
     break; }
         case NOP:
         {
@@ -45,9 +45,9 @@ namespace Emerald
         ADD_OPERATION(DADD, Double)
 
 #undef ADD_OPERATION
-#define SUB_OPERATION(name, type) case name: {  type var1 = m_OperandStacks.GetActive().Pop##type##(); \
-    type var0 = m_OperandStacks.GetActive().Pop##type##(); \
-    m_OperandStacks.GetActive().Push##type##((type)(var0 - var1));\
+#define SUB_OPERATION(name, type) case name: {  type var1 = m_OperandStacks.GetActive().Pop##type (); \
+    type var0 = m_OperandStacks.GetActive().Pop##type (); \
+    m_OperandStacks.GetActive().Push##type ((type)(var0 - var1));\
     break; }
 
         case BSUB:
@@ -65,9 +65,9 @@ namespace Emerald
 
 #undef SUB_OPERATION
 
-#define MUL_OPERATION(name, type) case name: { type var0 = m_OperandStacks.GetActive().Pop##type##();  \
-    type var1 = m_OperandStacks.GetActive().Pop##type##(); \
-    m_OperandStacks.GetActive().Push##type##((type)(var0 * var1));\
+#define MUL_OPERATION(name, type) case name: { type var0 = m_OperandStacks.GetActive().Pop##type ();  \
+    type var1 = m_OperandStacks.GetActive().Pop##type (); \
+    m_OperandStacks.GetActive().Push##type ((type)(var0 * var1));\
     break; }
 
         case BMUL:
@@ -84,9 +84,9 @@ namespace Emerald
         MUL_OPERATION(DMUL, Double)
 
 #undef MUL_OPERATION
-#define DIV_OPERATION(name, type) case name: {  type var1 = m_OperandStacks.GetActive().Pop##type##(); \
-    type var0 = m_OperandStacks.GetActive().Pop##type##(); \
-    m_OperandStacks.GetActive().Push##type##((type)(var0 / var1));\
+#define DIV_OPERATION(name, type) case name: {  type var1 = m_OperandStacks.GetActive().Pop##type (); \
+    type var0 = m_OperandStacks.GetActive().Pop##type (); \
+    m_OperandStacks.GetActive().Push##type ((type)(var0 / var1));\
     break; }
         case BDIV:
         {
@@ -172,16 +172,16 @@ namespace Emerald
         }
 #define COMP_OPERATION_FLOAT(name, type) case name : { \
     \
-    type var1 = m_OperandStacks.GetActive().Pop##type##(); \
-    type var0 = m_OperandStacks.GetActive().Pop##type##(); \
+    type var1 = m_OperandStacks.GetActive().Pop##type (); \
+    type var0 = m_OperandStacks.GetActive().Pop##type (); \
     type result = var0 - var1; \
     m_Registers.SetZF(var0 == var1); \
     m_Registers.SetSF(std::signbit(result));\
     break; }
 #define COMP_OPERATION_INT(name, type) case name : { \
     \
-    type var1 = m_OperandStacks.GetActive().Pop##type##(); \
-    type var0 = m_OperandStacks.GetActive().Pop##type##(); \
+    type var1 = m_OperandStacks.GetActive().Pop##type (); \
+    type var0 = m_OperandStacks.GetActive().Pop##type (); \
     type result = var0 - var1; \
     m_Registers.SetZF(var0 == var1); \
     m_Registers.SetSF(result < 0);\
@@ -253,7 +253,7 @@ namespace Emerald
             break;
         }
             // operand stack operations
-#define OPERAND_STACK_PUSH_OPERATION(name, type) case name : { m_OperandStacks.GetActive().Push##type##(Next##type()); break; }
+#define OPERAND_STACK_PUSH_OPERATION(name, type) case name : { m_OperandStacks.GetActive().Push##type (Next##type()); break; }
         OPERAND_STACK_PUSH_OPERATION(BPUSH, Byte)
         OPERAND_STACK_PUSH_OPERATION(SPUSH, Short)
         OPERAND_STACK_PUSH_OPERATION(IPUSH, Int)
@@ -264,7 +264,7 @@ namespace Emerald
         OPERAND_STACK_PUSH_OPERATION(CPUSH, Char)
 #undef  OPERAND_STACK_PUSH_OPERATION
 
-#define OPERAND_STACK_POP_OPERATION(name, type) case name : { m_OperandStacks.GetActive().Pop##type##(); break; }
+#define OPERAND_STACK_POP_OPERATION(name, type) case name : { m_OperandStacks.GetActive().Pop##type (); break; }
         OPERAND_STACK_POP_OPERATION(BPOP, Byte)
         OPERAND_STACK_POP_OPERATION(SPOP, Short)
         OPERAND_STACK_POP_OPERATION(IPOP, Int)
@@ -276,7 +276,7 @@ namespace Emerald
 #undef  OPERAND_STACK_POP_OPERATION
 
             // get from address
-#define GET_FROM_ADDRESS_OPERATION(name, type) case name : { auto* ptr = (type*)m_OperandStacks.GetActive().PopULong(); m_OperandStacks.GetActive().Push##type##(*ptr); break; }
+#define GET_FROM_ADDRESS_OPERATION(name, type) case name : { auto* ptr = (type*)m_OperandStacks.GetActive().PopULong(); m_OperandStacks.GetActive().Push##type (*ptr); break; }
         GET_FROM_ADDRESS_OPERATION(BGET, Byte)
         GET_FROM_ADDRESS_OPERATION(SGET, Short)
         GET_FROM_ADDRESS_OPERATION(IGET, Int)
@@ -288,7 +288,7 @@ namespace Emerald
 #undef  GET_FROM_ADDRESS_OPERATION
 
             // put into address
-#define PUT_INTO_ADDRESS_OPERATION(name, type) case name : { type data = m_OperandStacks.GetActive().Pop##type##(); auto* ptr = (type*)m_OperandStacks.GetActive().PopULong(); *ptr = data; break; }
+#define PUT_INTO_ADDRESS_OPERATION(name, type) case name : { type data = m_OperandStacks.GetActive().Pop##type (); auto* ptr = (type*)m_OperandStacks.GetActive().PopULong(); *ptr = data; break; }
         PUT_INTO_ADDRESS_OPERATION(BPUT, Byte)
         PUT_INTO_ADDRESS_OPERATION(SPUT, Short)
         PUT_INTO_ADDRESS_OPERATION(IPUT, Int)
@@ -381,7 +381,7 @@ namespace Emerald
         }
     }
 
-#define VM_NEXT_MEMBER_FUNCTION(type) type VirtualMachine::Next##type##() { type value = *(type*)m_Registers.rip; m_Registers.rip += sizeof type; return value; }
+#define VM_NEXT_MEMBER_FUNCTION(type) type VirtualMachine::Next##type () { type value = *(type*)m_Registers.rip; m_Registers.rip += sizeof(type); return value; }
 
     VM_NEXT_MEMBER_FUNCTION(Byte)
     VM_NEXT_MEMBER_FUNCTION(UShort)

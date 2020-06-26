@@ -19,7 +19,7 @@ namespace Emerald
         void Push(T val)
         {
             *(T*)m_StackPtr = val;
-            m_StackPtr += sizeof T;
+            m_StackPtr += sizeof(T);
         }
 
         void Push(size_t size, void* data)
@@ -28,8 +28,8 @@ namespace Emerald
             m_StackPtr += size;
         }
 
-#define OPERAND_STACK_PUSH(type) void Push##type##(type val) { Push<type>(val); } \
-    OperandStack& operator<<(type val) { Push##type##(val); return *this; }
+#define OPERAND_STACK_PUSH(type) void Push##type (type val) { Push<type>(val); } \
+    OperandStack& operator<<(type val) { Push##type (val); return *this; }
         OPERAND_STACK_PUSH(Byte)
         OPERAND_STACK_PUSH(UShort)
         OPERAND_STACK_PUSH(UInt)
@@ -48,14 +48,14 @@ namespace Emerald
         template<typename T>
         T Pop()
         {
-            m_StackPtr -= sizeof T;
+            m_StackPtr -= sizeof(T);
             return *(T*)m_StackPtr;
         }
 
 
 
-#define OPERAND_STACK_POP(type) type Pop##type##() { return Pop<type>(); } \
-    OperandStack& operator>>(##type##& val) { val = Pop##type##(); return *this; }
+#define OPERAND_STACK_POP(type) type Pop##type () { return Pop<type>(); } \
+    OperandStack& operator>>( type & val) { val = Pop##type (); return *this; }
 
         OPERAND_STACK_POP(Byte)
         OPERAND_STACK_POP(UShort)

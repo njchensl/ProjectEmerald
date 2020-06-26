@@ -29,13 +29,13 @@ namespace Emerald
         void Push(T val)
         {
             *(T*)m_Rsp = val;
-            m_Rsp += sizeof T;
+            m_Rsp += sizeof(T);
         }
 
         template<typename T>
         T Pop()
         {
-            m_Rsp -= sizeof T;
+            m_Rsp -= sizeof(T);
             return *(T*)m_Rsp;
         }
 
