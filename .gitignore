@@ -1,3 +1,6 @@
 /bin
 /bin-int
 /.vs
+/cmake-build-debug
+/cmake-build-debug-cygwin
+/cmake-build-release-cygwin
