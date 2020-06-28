@@ -44,6 +44,8 @@ namespace Emerald
     public:
         explicit VirtualMachine(byte*);
 
+        bool Running;
+
         ~VirtualMachine() override;
 
         void Execute() override;

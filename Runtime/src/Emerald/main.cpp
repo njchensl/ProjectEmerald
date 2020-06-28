@@ -4,10 +4,12 @@
 
 #include "Core.h"
 #include "Disassembler.h"
+#include "EmInvoke.h"
 #include "Runtime/Registers.h"
 #include "Runtime/VirtualMachine.h"
-#include "Runtime/OperandStack.h"
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "EndlessLoop"
 enum class ExecutionMode
 {
     None = 0,
@@ -18,15 +20,12 @@ enum class ExecutionMode
 int main(int argc, char** argv)
 {
     using namespace Emerald;
-
-    EM_CORE_ASSERT(argc >= 2, "Argument count must be greater than or equal to 2!");
-    if (argc == 1)
-    {
+#ifndef _DEBUG
+    if (argc == 1) {
         std::cout << "No parameters" << std::endl;
         return 0x101;
     }
-    if (argc < 1)
-    {
+    if (argc < 1) {
         std::cout << "No parameters" << std::endl;
         return 0x102;
     }
@@ -34,22 +33,22 @@ int main(int argc, char** argv)
     ExecutionMode mode = ExecutionMode::Interpret;
 
     std::string filepath;
-    for (int i = 1; i < argc; ++i)
-    {
+    for (int i = 1; i < argc; ++i) {
         std::string param = argv[i];
-        if (param == "-d")
-        {
+        if (param == "-d") {
             // disassembly mode
             mode = ExecutionMode::Disassembly;
         }
-        else
-        {
+        else {
             filepath = param;
             break;
         }
     }
+#else
+    ExecutionMode mode = ExecutionMode::Interpret;
+    std::string filepath = "C:\\Users\\njche\\Desktop\\test.exec";
+#endif
 
-    EM_CORE_ASSERT(mode != ExecutionMode::None, "Invalid execution mode!");
 
     //std::cout << filepath << std::endl;
     std::ifstream input(filepath, std::ios::binary);
@@ -62,15 +61,22 @@ int main(int argc, char** argv)
     case ExecutionMode::Interpret:
     {
         VirtualMachine* vm = new VirtualMachine(code);
+        // init emerald invoke
+        auto status = EmInvoke::Init();
+        if (status != EmInvokeStatus::Success)
+        {
+            std::cerr << "Failed to initialize EmInvoke" << std::endl;
+            return 1;
+        }
 
-        for (;;)
+        while (vm->Running)
         {
             vm->Execute();
         }
 
         delete vm;
-
-        return 1;
+        EmInvoke::Close();
+        return 0;
     }
     case ExecutionMode::Disassembly:
     {
@@ -79,12 +85,12 @@ int main(int argc, char** argv)
         {
             disassembler.Execute();
         }
-        return 1;
+        return 0;
     }
     case ExecutionMode::None:
     {
-        EM_CORE_ASSERT(false, "Invalid execution path!");
     }
     }
-
 }
+
+#pragma clang diagnostic pop

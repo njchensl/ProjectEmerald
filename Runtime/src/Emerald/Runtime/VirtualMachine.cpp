@@ -14,6 +14,7 @@ namespace Emerald
         m_Registers.rip = codeOffset + (ulong)p0;
         m_Registers.rp0 = m_Registers.rip;
         m_Data0 = p0 + dataOffset;
+        Running = true;
     }
 
     void VirtualMachine::Execute()
