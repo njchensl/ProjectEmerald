@@ -1,0 +1,16 @@
+# ninja log v5
+10	772	614996458	CMakeFiles/ProjectEmerald.dir/Runtime/src/Emerald/Runtime/OperandStackStack.cpp.obj	5f1f90cb90cece13
+3	875	614996458	CMakeFiles/ProjectEmerald.dir/Runtime/src/Emerald/Runtime/LocalVariableStack.cpp.obj	e3a214af51d6db07
+14	1872	614996459	CMakeFiles/ProjectEmerald.dir/Runtime/src/Emerald/Runtime/Registers.cpp.obj	84ac752ee76db243
+23	2713	614996460	CMakeFiles/ProjectEmerald.dir/Runtime/src/Emerald/Runtime/VirtualMachine.cpp.obj	da83d93484232942
+26	2809	614996460	CMakeFiles/ProjectEmerald.dir/Runtime/src/Emerald/Disassembler.cpp.obj	1809b8185aede426
+19	2969	614996460	CMakeFiles/ProjectEmerald.dir/Runtime/src/Emerald/main.cpp.obj	4ce31db286dd7281
+2969	3868	614996461	ProjectEmerald.exe	90d93826ecf46019
+1	472	615058660	CMakeFiles/ProjectEmerald.dir/Runtime/src/Emerald/Runtime/LocalVariableStack.cpp.obj	65c542359950a235
+9	492	615058660	CMakeFiles/ProjectEmerald.dir/Runtime/src/Emerald/Runtime/OperandStackStack.cpp.obj	230903d49ddfc582
+21	1090	615058660	CMakeFiles/ProjectEmerald.dir/Runtime/src/Emerald/Runtime/Registers.cpp.obj	ff2622e019a7faa0
+13	1740	615058661	CMakeFiles/ProjectEmerald.dir/Runtime/src/Emerald/Disassembler.cpp.obj	adc1b8f726f1be8e
+17	1907	615058661	CMakeFiles/ProjectEmerald.dir/Runtime/src/Emerald/Runtime/VirtualMachine.cpp.obj	c19419ccf07434ed
+5	2264	615058661	CMakeFiles/ProjectEmerald.dir/Runtime/src/Emerald/main.cpp.obj	ed3ef9e7785a59d2
+473	3125	615058662	CMakeFiles/ProjectEmerald.dir/Runtime/src/Emerald/Runtime/EmInvoke.cpp.obj	a72ffe34b67ebb58
+3126	3589	615058663	ProjectEmerald.exe	98ac80612e2d0833

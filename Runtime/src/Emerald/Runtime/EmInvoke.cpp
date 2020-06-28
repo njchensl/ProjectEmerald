@@ -61,11 +61,10 @@ namespace Emerald
 
     EmInvokeStatus EmInvoke::Close()
     {
-        UnmapViewOfFile(m_Buffer);
-
-        CloseHandle(m_MapFile);
         *(int*)m_Buffer = (int)MemStatus::Exit;
         std::this_thread::sleep_for(std::chrono::milliseconds(300));
+        UnmapViewOfFile(m_Buffer);
+        CloseHandle(m_MapFile);
         CloseHandle(m_ProcessInfo.hProcess);
         CloseHandle(m_ProcessInfo.hThread);
         return EmInvokeStatus::Success;

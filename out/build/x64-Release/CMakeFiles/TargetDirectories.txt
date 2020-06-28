@@ -1,0 +1,3 @@
+C:/Users/njche/source/repos/ProjectEmerald/out/build/x64-Release/CMakeFiles/ProjectEmerald.dir
+C:/Users/njche/source/repos/ProjectEmerald/out/build/x64-Release/CMakeFiles/edit_cache.dir
+C:/Users/njche/source/repos/ProjectEmerald/out/build/x64-Release/CMakeFiles/rebuild_cache.dir

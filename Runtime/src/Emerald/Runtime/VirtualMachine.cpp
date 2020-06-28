@@ -375,6 +375,11 @@ namespace Emerald
             m_Registers.rbp = m_OperandStacks.GetActive().PopULong();
             break;
         }
+        case HALT:
+        {
+            Running = false;
+            break;
+        }
         default:
         {
             throw UnknownInstructionError();

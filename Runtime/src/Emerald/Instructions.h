@@ -1,6 +1,7 @@
 #pragma once
 
 #define NOP    0xFFFF
+#define HALT   0xFFFE
 
 // arithmetic operators
 //             0x00xx
