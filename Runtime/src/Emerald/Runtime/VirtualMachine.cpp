@@ -1,6 +1,11 @@
 #include "VirtualMachine.h"
 
 #include <cmath>
+#include <vector>
+
+
+#include "EmInvoke.h"
+#include "Utils.h"
 #include "../Core.h"
 #include "../Instructions.h"
 
@@ -375,6 +380,99 @@ namespace Emerald
             m_Registers.rbp = m_OperandStacks.GetActive().PopULong();
             break;
         }
+        case EXCALL:
+        {
+            // 0xEXCALL    - aa                 - bb/bb/.../bb - padding - cc                   - dd/dd/.../dd  -
+            // instruction - module name length - module name  - padding - function name length - function name -
+            //
+            // padding - ee                 - ff            - gg          - hh/hh/.../hh   - padding - 
+            // padding - calling convention - return format - num of args - argument types - padding -
+            //
+            // for each of the arguments:
+            //     if primitive type:
+            //         ii / iiii / iiiiiiii / iiiiiiiiiiiiiiii (depending its size) - padding -
+            //         data                                                         - padding -
+            //     if pointer:
+            //         iiiiiiii                          - padding - jj... - padding
+            //         32 bit unsigned int for data size - padding - data  - padding
+            MemBlockAllocator<8192> allocator; // 8 kilobytes
+            // module name
+            byte moduleNameLength = NextByte();
+            char* moduleName = (char*)allocator.Allocate((size_t)moduleNameLength);
+            memcpy(moduleName, m_Registers.ripPtr, (size_t)moduleNameLength);
+            m_Registers.rip += (size_t)moduleNameLength;
+            m_Registers.rip = RoundUp<ulong, 8>(m_Registers.rip);
+
+            // function name
+            byte functionNameLength = NextByte();
+            char* functionName = (char*)allocator.Allocate((size_t)functionNameLength);
+            memcpy(functionName, m_Registers.ripPtr, (size_t)functionNameLength);
+            m_Registers.rip += (size_t)functionNameLength;
+            m_Registers.rip = RoundUp<ulong, 8>(m_Registers.rip);
+
+            // calling convention
+            byte callingConvention = NextByte();
+            // return format
+            byte returnFormat = NextByte();
+            // arguments
+            byte numArgs = NextByte();
+            char* argTypes = (char*)allocator.Allocate((size_t)numArgs);
+            memcpy(argTypes, m_Registers.ripPtr, (size_t)numArgs);
+            m_Registers.rip += (size_t)numArgs;
+            m_Registers.rip = RoundUp<ulong, 8>(m_Registers.rip);
+
+
+            byte* argsPacked = (byte*)allocator.Allocate(4096); // 4 kilobytes of packed arguments
+            byte* argHead = argsPacked;
+            std::vector<std::pair<void*, uint>> pointers;
+            for (int i = 0; i < (int)numArgs; i++)
+            {
+                switch (argTypes[i])
+                {
+#define ARG_TYPE_CASE(name, type) case name : {  *(type*)argHead = m_OperandStacks.GetActive().Pop##type (); \
+                    argHead += sizeof(type);\
+                    break; }
+
+                ARG_TYPE_CASE('c', Byte)
+                case '2':
+                ARG_TYPE_CASE('s', Short)
+                case '4':
+                case 'l':
+                ARG_TYPE_CASE('i', Int)
+                case '8':
+                ARG_TYPE_CASE('e', Long)
+                ARG_TYPE_CASE('f', Float)
+                ARG_TYPE_CASE('d', Double)
+
+#undef ARG_TYPE_CASE
+                case 'p':
+                {
+                    // pointer marshalling
+                    // uint size + data
+                    void* ptr = m_OperandStacks.GetActive().Pop<void*>();
+                    uint size = NextUInt();
+                    *(uint*)argHead = size;
+                    argHead += sizeof(uint);
+                    memcpy(argHead, ptr, size);
+                    argHead += size;
+                    pointers.emplace_back(ptr, size);
+                    break;
+                }
+                }
+            }
+            m_Registers.rip = RoundUp<ulong, 8>(m_Registers.rip); // final padding
+            EmInvoke::Call(moduleNameLength, moduleName,
+                           functionNameLength, functionName,
+                           callingConvention,
+                           (char)returnFormat,
+                           numArgs, argTypes, argsPacked);
+            // restore pointers
+            for (auto [ptr, size] : pointers)
+            {
+                
+            }
+            break;
+        }
         case HALT:
         {
             Running = false;
@@ -393,6 +491,7 @@ namespace Emerald
     VM_NEXT_MEMBER_FUNCTION(UShort)
     VM_NEXT_MEMBER_FUNCTION(Short)
     VM_NEXT_MEMBER_FUNCTION(Int)
+    VM_NEXT_MEMBER_FUNCTION(UInt)
     VM_NEXT_MEMBER_FUNCTION(Long)
     VM_NEXT_MEMBER_FUNCTION(ULong)
     VM_NEXT_MEMBER_FUNCTION(Float)

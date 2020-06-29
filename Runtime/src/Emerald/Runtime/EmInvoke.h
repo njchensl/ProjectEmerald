@@ -3,6 +3,8 @@
 #include <cstdint>
 #include <processthreadsapi.h>
 
+#include "Core.h"
+
 namespace Emerald
 {
     enum class MemStatus : int
@@ -23,6 +25,16 @@ namespace Emerald
     {
     public:
         static EmInvokeStatus Init();
+        static EmInvokeStatus Call(
+            byte moduleNameLength,
+            char* moduleName,
+            byte functionNameLength,
+            char* functionName,
+            byte callingConvention,
+            char returnFormat,
+            byte numArgs,
+            char* argFormat,
+            byte* argsPacked);
         static EmInvokeStatus Close();
     private:
         inline static STARTUPINFO m_StartupInfo;

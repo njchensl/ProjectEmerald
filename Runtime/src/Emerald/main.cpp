@@ -8,8 +8,6 @@
 #include "Runtime/Registers.h"
 #include "Runtime/VirtualMachine.h"
 
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "EndlessLoop"
 enum class ExecutionMode
 {
     None = 0,
@@ -92,5 +90,3 @@ int main(int argc, char** argv)
     }
     }
 }
-
-#pragma clang diagnostic pop

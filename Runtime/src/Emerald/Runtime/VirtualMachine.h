@@ -34,6 +34,7 @@ namespace Emerald
         inline UShort NextUShort();
         inline Short NextShort();
         inline Int NextInt();
+        inline UInt NextUInt();
         inline Long NextLong();
         inline ULong NextULong();
         inline Float NextFloat();

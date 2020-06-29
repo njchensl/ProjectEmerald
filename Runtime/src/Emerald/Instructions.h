@@ -116,3 +116,7 @@
 #define ACCRBP 0x0302
 #define PUTRSP 0x0303
 #define PUTRBP 0x0304
+
+// Emerald Invoke
+//             0x04xx
+#define EXCALL 0x0400
