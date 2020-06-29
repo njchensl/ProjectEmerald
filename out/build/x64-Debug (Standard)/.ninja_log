@@ -1,6 +1,0 @@
-# ninja log v5
-1	1305	614995636	CMakeFiles/ProjectEmerald.dir/Runtime/src/Emerald/Runtime/OperandStackStack.cpp.obj	4bb6a09c7292a683
-22	1324	614995636	CMakeFiles/ProjectEmerald.dir/Runtime/src/Emerald/Runtime/LocalVariableStack.cpp.obj	804a14e7cd20e0db
-30	2200	614995637	CMakeFiles/ProjectEmerald.dir/Runtime/src/Emerald/Runtime/Registers.cpp.obj	3bc3b77323d344bf
-25	2218	614995637	CMakeFiles/ProjectEmerald.dir/Runtime/src/Emerald/Runtime/VirtualMachine.cpp.obj	1f6eb3af7139dc6a
-37	2957	614995638	CMakeFiles/ProjectEmerald.dir/Runtime/src/Emerald/Disassembler.cpp.obj	dc4e8d6372b4921c

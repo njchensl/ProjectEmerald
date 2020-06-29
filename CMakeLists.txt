@@ -23,5 +23,5 @@ add_executable(ProjectEmerald
         Runtime/src/Emerald/Disassembler.h
         Runtime/src/Emerald/Instructions.h
         Runtime/src/Emerald/main.cpp
-         "Runtime/src/Emerald/Runtime/EmInvoke.cpp" "Runtime/src/Emerald/Runtime/EmInvoke.h")
+         "Runtime/src/Emerald/Runtime/EmInvoke.cpp" "Runtime/src/Emerald/Runtime/EmInvoke.h" "Runtime/src/Emerald/Utils.h")
 

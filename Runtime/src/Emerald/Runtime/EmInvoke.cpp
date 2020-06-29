@@ -132,12 +132,11 @@ namespace Emerald
         *(int*)m_Buffer = (int)MemStatus::ServerRead;
         while (*(MemStatus*)m_Buffer != MemStatus::ClientRead);
         // read execution result
-
         // return value
 
         // pointers
 
-
+        *(int*)m_Buffer = (int)MemStatus::Idle;
         return EmInvokeStatus::Success;
     }
 
