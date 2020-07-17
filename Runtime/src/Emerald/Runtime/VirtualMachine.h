@@ -3,8 +3,6 @@
 #include <exception>
 
 
-
-#include "LocalVariableStack.h"
 #include "OperandStack.h"
 #include "OperandStackStack.h"
 #include "Registers.h"
@@ -28,7 +26,6 @@ namespace Emerald
         Registers m_Registers;
         byte* m_Data0;
         OperandStackStack m_OperandStacks;
-        LocalVariableStack m_LocalVariableStack;
 
         inline Byte NextByte();
         inline UShort NextUShort();

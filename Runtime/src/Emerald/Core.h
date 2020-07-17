@@ -4,7 +4,6 @@
 
 namespace Emerald
 {
-
     typedef std::byte Byte;
     typedef std::byte byte;
     typedef int8_t SByte;
@@ -30,5 +29,5 @@ namespace Emerald
 
     typedef bool Bool;
     typedef bool Boolean;
-
 }
+

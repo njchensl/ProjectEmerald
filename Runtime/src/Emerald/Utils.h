@@ -1,4 +1,5 @@
 #pragma once
+#include "Core.h"
 
 namespace Emerald
 {
@@ -25,12 +26,27 @@ namespace Emerald
         void* Allocate(size_t size) {
             void* ptr = m_Head;
             m_Head += size;
-            m_Head = (byte*)RoundUp<ulong, 8>((ulong)m_Head);
+            m_Head = (Byte*)RoundUp<ulong, 8>((ulong)m_Head);
             return ptr;
         }
 
     private:
-        byte m_Data[Size];
-        byte* m_Head;
+        Byte m_Data[Size];
+        Byte* m_Head;
     };
+
+    template <typename R, typename T>
+    R copy_cast(T& t) {
+        R r;
+        memcpy(&r, &t, sizeof(T));
+        return r;
+    }
+
+    template <typename R>
+    R ptr_copy_cast(void* ptr, size_t size)
+    {
+        R r;
+        memcpy(&r, ptr, size);
+        return r;
+    }
 }

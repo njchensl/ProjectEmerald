@@ -4,7 +4,6 @@
 
 #include "Core.h"
 #include "Disassembler.h"
-#include "EmInvoke.h"
 #include "Runtime/Registers.h"
 #include "Runtime/VirtualMachine.h"
 
@@ -59,21 +58,12 @@ int main(int argc, char** argv)
     case ExecutionMode::Interpret:
     {
         VirtualMachine* vm = new VirtualMachine(code);
-        // init emerald invoke
-        auto status = EmInvoke::Init();
-        if (status != EmInvokeStatus::Success)
-        {
-            std::cerr << "Failed to initialize EmInvoke" << std::endl;
-            return 1;
-        }
-
         while (vm->Running)
         {
             vm->Execute();
         }
 
         delete vm;
-        EmInvoke::Close();
         return 0;
     }
     case ExecutionMode::Disassembly:

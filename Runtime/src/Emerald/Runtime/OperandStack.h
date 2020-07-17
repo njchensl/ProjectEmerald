@@ -2,86 +2,120 @@
 
 #include <cstring>
 
+
+#include "Utils.h"
 #include "../Core.h"
 
 namespace Emerald
 {
-    template <int Size>
+    template <size_t Count>
     class OperandStack
     {
     public:
-        OperandStack() : m_StackBase(m_StackData), m_StackTop(m_StackData + Size), m_StackPtr(m_StackData)
+        OperandStack() : m_Index(0)
         {
         }
 
-        // push
-        template<typename T>
-        void Push(T val)
+        void PushByte(Byte val)
         {
-            *(T*)m_StackPtr = val;
-            m_StackPtr += sizeof(T);
+            m_StackData[m_Index++] = (int)val;
         }
 
-        void Push(size_t size, void* data)
+        void PushShort(Short val)
         {
-            memcpy(m_StackPtr, data, size);
-            m_StackPtr += size;
+            m_StackData[m_Index++] = val;
         }
 
-#define OPERAND_STACK_PUSH(type) void Push##type (type val) { Push<type>(val); } \
-    OperandStack& operator<<(type val) { Push##type (val); return *this; }
-        OPERAND_STACK_PUSH(Byte)
-        OPERAND_STACK_PUSH(UShort)
-        OPERAND_STACK_PUSH(UInt)
-        OPERAND_STACK_PUSH(ULong)
-        OPERAND_STACK_PUSH(SByte)
-        OPERAND_STACK_PUSH(Short)
-        OPERAND_STACK_PUSH(Int)
-        OPERAND_STACK_PUSH(Long)
-        OPERAND_STACK_PUSH(Float)
-        OPERAND_STACK_PUSH(Double)
-        OPERAND_STACK_PUSH(Char)
-        OPERAND_STACK_PUSH(Bool)
-#undef  OPERAND_STACK_PUSH
-
-        // pop
-        template<typename T>
-        T Pop()
+        void PushInt(Int val)
         {
-            m_StackPtr -= sizeof(T);
-            return *(T*)m_StackPtr;
+            m_StackData[m_Index++] = val;
         }
 
+        void PushLong(Long val)
+        {
+            memcpy(&m_StackData[m_Index], &val, 8);
+            m_Index += 2;
+        }
 
+        void PushFloat(Float val)
+        {
+            memcpy(&m_StackData[m_Index], &val, 4);
+            m_Index++;
+        }
 
-#define OPERAND_STACK_POP(type) type Pop##type () { return Pop<type>(); } \
-    OperandStack& operator>>( type & val) { val = Pop##type (); return *this; }
+        void PushDouble(Double val)
+        {
+            memcpy(&m_StackData[m_Index], &val, 8);
+            m_Index += 2;
+        }
 
-        OPERAND_STACK_POP(Byte)
-        OPERAND_STACK_POP(UShort)
-        OPERAND_STACK_POP(UInt)
-        OPERAND_STACK_POP(ULong)
-        OPERAND_STACK_POP(SByte)
-        OPERAND_STACK_POP(Short)
-        OPERAND_STACK_POP(Int)
-        OPERAND_STACK_POP(Long)
-        OPERAND_STACK_POP(Float)
-        OPERAND_STACK_POP(Double)
-        OPERAND_STACK_POP(Char)
-        OPERAND_STACK_POP(Bool)
+        void PushChar(Char val)
+        {
+            m_StackData[m_Index++] = val;
+        }
 
-#undef  OPERAND_STACK_POP
+        void PushBoolean(Boolean val)
+        {
+            m_StackData[m_Index++] = val;
+        }
+
+        Byte PopByte()
+        {
+            m_Index--;
+            return static_cast<Byte>(m_StackData[m_Index]);
+        }
+
+        Short PopShort()
+        {
+            m_Index--;
+            return static_cast<Short>(m_StackData[m_Index]);
+        }
+
+        Int PopInt()
+        {
+            m_Index--;
+            return m_StackData[m_Index];
+        }
+
+        Long PopLong()
+        {
+            m_Index -= 2;
+            return ptr_copy_cast<Long>(&m_StackData[m_Index], 8);
+        }
+
+        Float PopFloat()
+        {
+            m_Index--;
+            return ptr_copy_cast<Float>(&m_StackData[m_Index], 4);
+        }
+
+        Double PopDouble()
+        {
+            m_Index -= 2;
+            return ptr_copy_cast<Double>(&m_StackData[m_Index], 8);
+        }
+
+        Char PopChar()
+        {
+            m_Index--;
+            return static_cast<Char>(m_StackData[m_Index]);
+        }
+
+        Boolean PopBoolean()
+        {
+            m_Index--;
+            return static_cast<Boolean>(m_StackData[m_Index]);
+        }
 
         void Reset()
         {
-            m_StackPtr = m_StackBase;
+            m_Index = 0;
         }
 
     private:
-        byte m_StackData[Size];
-        byte* const m_StackBase;
-        byte* const m_StackTop;
-        // this pointer always points at the next available byte, i.e. the byte that it points at is always empty, or assumed to be empty
-        byte* m_StackPtr;
+        int m_StackData[Count];
+        // this index always points at the next available byte, i.e. the byte that it points at is always empty, or assumed to be empty
+        size_t m_Index;
+        
     };
 }

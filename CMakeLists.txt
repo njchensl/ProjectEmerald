@@ -9,8 +9,6 @@ include_directories(Runtime/src/Emerald)
 include_directories(Runtime/src/Emerald/Runtime)
 
 add_executable(ProjectEmerald
-        Runtime/src/Emerald/Runtime/LocalVariableStack.cpp
-        Runtime/src/Emerald/Runtime/LocalVariableStack.h
         Runtime/src/Emerald/Runtime/OperandStack.h
         Runtime/src/Emerald/Runtime/OperandStackStack.cpp
         Runtime/src/Emerald/Runtime/OperandStackStack.h
@@ -23,5 +21,5 @@ add_executable(ProjectEmerald
         Runtime/src/Emerald/Disassembler.h
         Runtime/src/Emerald/Instructions.h
         Runtime/src/Emerald/main.cpp
-         "Runtime/src/Emerald/Runtime/EmInvoke.cpp" "Runtime/src/Emerald/Runtime/EmInvoke.h" "Runtime/src/Emerald/Utils.h")
+        "Runtime/src/Emerald/Utils.h" "Runtime/src/Emerald/Runtime/Type.h" "Runtime/src/Emerald/Runtime/Type.cpp")
 
