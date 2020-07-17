@@ -51,7 +51,7 @@ int main(int argc, char** argv)
     std::ifstream input(filepath, std::ios::binary);
     std::vector<uint8_t> buffer(std::istreambuf_iterator<char>(input), {});
     //unsigned long long length = buffer.size();
-    byte* code = (byte*)buffer.data();
+    Byte* code = (Byte*)buffer.data();
 
     switch (mode)
     {

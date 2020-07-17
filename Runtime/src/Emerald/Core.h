@@ -1,6 +1,8 @@
 #pragma once
 #include <cstdint>
 #include <cstddef>
+#include <string>
+#include <Windows.h>
 
 namespace Emerald
 {
@@ -29,5 +31,10 @@ namespace Emerald
 
     typedef bool Bool;
     typedef bool Boolean;
+    typedef std::string String;
+
+    typedef UINT OBJHANDLE;
+    static_assert(sizeof(OBJHANDLE) == 4);
+    
 }
 

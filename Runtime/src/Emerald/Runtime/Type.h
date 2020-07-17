@@ -5,7 +5,7 @@ namespace Emerald
     class Class;
 
     // types are only loaded after all classes are loaded
-    class Type
+    class alignas(8) Type
     {
     public:
         Type();
@@ -14,6 +14,7 @@ namespace Emerald
 
         bool IsPrimitive() const;
         bool IsClass() const;
+        bool IsGenericReference() const;
         bool IsValid() const;
     private:
         bool m_Primitive;

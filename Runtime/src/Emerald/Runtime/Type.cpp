@@ -2,7 +2,7 @@
 
 namespace Emerald
 {
-    Type::Type() : m_Primitive(true), m_TypeCode('\0')
+    Type::Type() : m_Primitive(true), m_Class(nullptr), m_TypeCode('\0')
     {
     }
 
@@ -10,7 +10,7 @@ namespace Emerald
     {
     }
 
-    Type::Type(char typecode) : m_Primitive(true), m_TypeCode(typecode)
+    Type::Type(char typecode) : m_Primitive(true), m_Class(nullptr), m_TypeCode(typecode)
     {
     }
 
@@ -24,8 +24,13 @@ namespace Emerald
         return !m_Primitive;
     }
 
+    bool Type::IsGenericReference() const
+    {
+        return IsClass() && m_Class == nullptr;
+    }
+
     bool Type::IsValid() const
     {
-        return !(m_Primitive && m_TypeCode == '\0' || !m_Primitive && m_Class == nullptr);
+        return m_Primitive && m_TypeCode == '\0';
     }
 }
