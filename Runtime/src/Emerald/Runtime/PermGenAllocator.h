@@ -23,7 +23,7 @@ namespace Emerald
                 return nullptr; // buffer overflow
             }
 
-            return new(ptr) T(std::forward<Args>(args)...);
+            return new(ptr) T(std::forward<Args>(args)...); // call ctor
         }
 
         static void Shutdown();
