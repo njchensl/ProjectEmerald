@@ -8,8 +8,15 @@ namespace Emerald
     public:
         Class(const Class&) = delete;
         Class& operator=(const Class&) = delete;
-        Class(Class&&) = delete;
-        Class& operator=(Class&&) = delete;
+
+        Class(Class&&)
+        {
+        }
+
+        Class& operator=(Class&&)
+        {
+        }
+
     private:
         String m_Name;
     };

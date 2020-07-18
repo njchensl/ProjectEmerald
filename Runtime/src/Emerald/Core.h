@@ -34,7 +34,11 @@ namespace Emerald
     typedef std::string String;
 
     typedef UINT OBJHANDLE;
+
     static_assert(sizeof(OBJHANDLE) == 4);
+    static_assert(sizeof(Char) == 2);
+    static_assert(sizeof(Byte) == 1);
+    static_assert(sizeof(void*) == 8); // 64-bit
     
 }
 

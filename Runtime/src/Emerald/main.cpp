@@ -4,6 +4,7 @@
 
 #include "Core.h"
 #include "Disassembler.h"
+#include "PermGenAllocator.h"
 #include "Runtime/Registers.h"
 #include "Runtime/VirtualMachine.h"
 
@@ -57,6 +58,8 @@ int main(int argc, char** argv)
     {
     case ExecutionMode::Interpret:
     {
+        PermGenAllocator::Init(82 * 1024 * 1024);
+        PermGenAllocator::New<VirtualMachine>(code);
         VirtualMachine* vm = new VirtualMachine(code);
         while (vm->Running)
         {
@@ -64,6 +67,7 @@ int main(int argc, char** argv)
         }
 
         delete vm;
+        PermGenAllocator::Shutdown();
         return 0;
     }
     case ExecutionMode::Disassembly:

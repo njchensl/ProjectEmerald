@@ -21,5 +21,5 @@ add_executable(ProjectEmerald
         Runtime/src/Emerald/Disassembler.h
         Runtime/src/Emerald/Instructions.h
         Runtime/src/Emerald/main.cpp
-        "Runtime/src/Emerald/Utils.h" "Runtime/src/Emerald/Runtime/Type.h" "Runtime/src/Emerald/Runtime/Type.cpp" "Runtime/src/Emerald/Runtime/Class.h" "Runtime/src/Emerald/Runtime/Class.cpp" "Runtime/src/Emerald/Runtime/LocalVarArray.cpp")
+        "Runtime/src/Emerald/Utils.h" "Runtime/src/Emerald/Runtime/Type.h" "Runtime/src/Emerald/Runtime/Type.cpp" "Runtime/src/Emerald/Runtime/Class.h" "Runtime/src/Emerald/Runtime/Class.cpp" "Runtime/src/Emerald/Runtime/LocalVarArray.cpp" "Runtime/src/Emerald/Runtime/PermGenAllocator.cpp")
 
