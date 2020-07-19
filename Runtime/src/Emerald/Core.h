@@ -33,7 +33,8 @@ namespace Emerald
     typedef bool Boolean;
     typedef std::string String;
 
-    typedef UINT OBJHANDLE;
+    typedef UInt OBJHANDLE;
+    typedef char AChar;
 
     static_assert(sizeof(OBJHANDLE) == 4);
     static_assert(sizeof(Char) == 2);
