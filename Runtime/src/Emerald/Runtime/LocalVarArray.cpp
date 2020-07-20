@@ -4,7 +4,7 @@
 
 namespace Emerald
 {
-    LocalVarArray::LocalVarArray(size_t count) : m_Data(new int[count]), m_Types(new Type[count])
+    LocalVarArray::LocalVarArray(size_t count) : m_Data(new Int[count]), m_Types(new Type[count])
     {
     }
 

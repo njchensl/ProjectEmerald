@@ -41,7 +41,7 @@ namespace Emerald
             return *this;
         }
 
-        ~LocalVarArray();
+        ~LocalVarArray() noexcept;
 
         template <typename T>
         T Load(size_t index)
@@ -49,98 +49,170 @@ namespace Emerald
             throw UnsupportedTypeException();
         }
 
-        template <>
-        Byte Load<Byte>(size_t index)
+        template <typename T>
+        void Store(size_t index, T val)
         {
-            if (m_Types[index].IsClass())
-            {
-                throw UnsupportedTypeException();
-            }
-            return static_cast<Byte>(m_Data[index]);
-        }
-
-        template <>
-        Short Load<Short>(size_t index)
-        {
-            if (m_Types[index].IsClass())
-            {
-                throw UnsupportedTypeException();
-            }
-            return static_cast<Short>(m_Data[index]);
-        }
-
-        template <>
-        Int Load<Int>(size_t index)
-        {
-            if (m_Types[index].IsClass())
-            {
-                throw UnsupportedTypeException();
-            }
-            return static_cast<Int>(m_Data[index]);
-        }
-
-        template <>
-        Long Load<Long>(size_t index)
-        {
-            if (m_Types[index].IsClass())
-            {
-                throw UnsupportedTypeException();
-            }
-            return ptr_copy_cast<Long>(&m_Data[index], sizeof(Long));
-        }
-
-        template <>
-        Float Load<Float>(size_t index)
-        {
-            if (m_Types[index].IsClass())
-            {
-                throw UnsupportedTypeException();
-            }
-            return ptr_copy_cast<Float>(&m_Data[index], sizeof(Float));
-        }
-
-        template <>
-        Double Load<Double>(size_t index)
-        {
-            if (m_Types[index].IsClass())
-            {
-                throw UnsupportedTypeException();
-            }
-            return ptr_copy_cast<Double>(&m_Data[index], sizeof(Double));
-        }
-
-        template <>
-        Char Load<Char>(size_t index)
-        {
-            if (m_Types[index].IsClass())
-            {
-                throw UnsupportedTypeException();
-            }
-            return static_cast<Char>(m_Data[index]);
-        }
-
-        template <>
-        Boolean Load<Boolean>(size_t index)
-        {
-            if (m_Types[index].IsClass())
-            {
-                throw UnsupportedTypeException();
-            }
-            return static_cast<Boolean>(m_Data[index]);
-        }
-
-        template <>
-        OBJHANDLE Load<OBJHANDLE>(size_t index)
-        {
-            if (!m_Types[index].IsClass())
-            {
-                throw UnsupportedTypeException();
-            }
-            return ptr_copy_cast<OBJHANDLE>(&m_Data[index], sizeof(OBJHANDLE));
+            throw UnsupportedTypeException();
         }
 
     private:
-        int* m_Data;
+        Int* m_Data;
         Type* m_Types;
     };
+
+    template <>
+    inline void LocalVarArray::Store<Byte>(size_t index, Byte val)
+    {
+        m_Types[index] = Type('B');
+        m_Data[index] = static_cast<Int>(val);
+    }
+
+    template <>
+    inline void LocalVarArray::Store<Short>(size_t index, Short val)
+    {
+        m_Types[index] = Type('S');
+        m_Data[index] = static_cast<Int>(val);
+    }
+
+    template <>
+    inline void LocalVarArray::Store<Int>(size_t index, Int val)
+    {
+        m_Types[index] = Type('I');
+        m_Data[index] = static_cast<Int>(val);
+    }
+
+    template <>
+    inline void LocalVarArray::Store<Long>(size_t index, Long val)
+    {
+        m_Types[index] = Type('J');
+        m_Types[index + 1] = Type('J');
+        memcpy(&m_Data[index], &val, sizeof(Long));
+    }
+
+    template <>
+    inline void LocalVarArray::Store<Float>(size_t index, Float val)
+    {
+        m_Types[index] = Type('F');
+        m_Data[index] = copy_cast<Int>(val);
+    }
+
+    template <>
+    inline void LocalVarArray::Store<Double>(size_t index, Double val)
+    {
+        m_Types[index] = Type('D');
+        m_Types[index + 1] = Type('D');
+        memcpy(&m_Data[index], &val, sizeof(Double));
+    }
+
+    template <>
+    inline void LocalVarArray::Store<Char>(size_t index, Char val)
+    {
+        m_Types[index] = Type('C');
+        m_Data[index] = static_cast<Int>(val);
+    }
+
+    template <>
+    inline void LocalVarArray::Store<Boolean>(size_t index, Boolean val)
+    {
+        m_Types[index] = Type('Z');
+        m_Data[index] = static_cast<Int>(val);
+    }
+
+    template <>
+    inline void LocalVarArray::Store<OBJHANDLE>(size_t index, OBJHANDLE val)
+    {
+        m_Types[index] = Type(nullptr);
+        m_Data[index] = static_cast<Int>(val);
+    }
+
+    template <>
+    inline Byte LocalVarArray::Load<Byte>(size_t index)
+    {
+        if (m_Types[index].IsClass())
+        {
+            throw UnsupportedTypeException();
+        }
+        return static_cast<Byte>(m_Data[index]);
+    }
+
+    template <>
+    inline Short LocalVarArray::Load<Short>(size_t index)
+    {
+        if (m_Types[index].IsClass())
+        {
+            throw UnsupportedTypeException();
+        }
+        return static_cast<Short>(m_Data[index]);
+    }
+
+    template <>
+    inline Int LocalVarArray::Load<Int>(size_t index)
+    {
+        if (m_Types[index].IsClass())
+        {
+            throw UnsupportedTypeException();
+        }
+        return static_cast<Int>(m_Data[index]);
+    }
+
+    template <>
+    inline Long LocalVarArray::Load<Long>(size_t index)
+    {
+        if (m_Types[index].IsClass())
+        {
+            throw UnsupportedTypeException();
+        }
+        return ptr_copy_cast<Long>(&m_Data[index], sizeof(Long));
+    }
+
+    template <>
+    inline Float LocalVarArray::Load<Float>(size_t index)
+    {
+        if (m_Types[index].IsClass())
+        {
+            throw UnsupportedTypeException();
+        }
+        return ptr_copy_cast<Float>(&m_Data[index], sizeof(Float));
+    }
+
+    template <>
+    inline Double LocalVarArray::Load<Double>(size_t index)
+    {
+        if (m_Types[index].IsClass())
+        {
+            throw UnsupportedTypeException();
+        }
+        return ptr_copy_cast<Double>(&m_Data[index], sizeof(Double));
+    }
+
+    template <>
+    inline Char LocalVarArray::Load<Char>(size_t index)
+    {
+        if (m_Types[index].IsClass())
+        {
+            throw UnsupportedTypeException();
+        }
+        return static_cast<Char>(m_Data[index]);
+    }
+
+
+    template <>
+    inline Boolean LocalVarArray::Load<Boolean>(size_t index)
+    {
+        if (m_Types[index].IsClass())
+        {
+            throw UnsupportedTypeException();
+        }
+        return static_cast<Boolean>(m_Data[index]);
+    }
+
+    template <>
+    inline OBJHANDLE LocalVarArray::Load<OBJHANDLE>(size_t index)
+    {
+        if (!m_Types[index].IsClass())
+        {
+            throw UnsupportedTypeException();
+        }
+        return ptr_copy_cast<OBJHANDLE>(&m_Data[index], sizeof(OBJHANDLE));
+    }
 }

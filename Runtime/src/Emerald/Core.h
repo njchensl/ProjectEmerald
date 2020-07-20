@@ -38,8 +38,9 @@ namespace Emerald
 
     static_assert(sizeof(OBJHANDLE) == 4);
     static_assert(sizeof(Char) == 2);
+    static_assert(sizeof(AChar) == 1);
     static_assert(sizeof(Byte) == 1);
-    static_assert(sizeof(void*) == 8); // 64-bit
+    static_assert(sizeof(void*) == 8); // 64-bit sicherstellen
     
 }
 

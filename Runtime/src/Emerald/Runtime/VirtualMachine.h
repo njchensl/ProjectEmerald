@@ -16,7 +16,7 @@ namespace Emerald
     public:
         IVirtualMachine() = default;
 
-        virtual ~IVirtualMachine() = default;
+        virtual ~IVirtualMachine() noexcept = default;
 
         virtual void Execute() = 0;
     };
@@ -44,7 +44,7 @@ namespace Emerald
 
         bool Running;
 
-        ~VirtualMachine() override;
+        ~VirtualMachine() noexcept override;
 
         void Execute() override;
     };

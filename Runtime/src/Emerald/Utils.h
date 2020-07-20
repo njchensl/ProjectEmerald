@@ -36,17 +36,17 @@ namespace Emerald
     };
 
     template <typename R, typename T>
-    R copy_cast(T& t) {
+    R copy_cast(const T& t) {
         R r;
         memcpy(&r, &t, sizeof(T));
         return r;
     }
 
     template <typename R>
-    R ptr_copy_cast(void* ptr, size_t size)
+    R ptr_copy_cast(const void* src, size_t size)
     {
         R r;
-        memcpy(&r, ptr, size);
+        memcpy(&r, src, size);
         return r;
     }
 }

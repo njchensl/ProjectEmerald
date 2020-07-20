@@ -18,6 +18,14 @@ namespace Emerald
         {
         }
 
+        OperandStack(const OperandStack& other) = delete;
+
+        OperandStack(OperandStack&& other) noexcept = delete;
+
+        OperandStack& operator=(const OperandStack& other) = delete;
+
+        OperandStack& operator=(OperandStack&& other) noexcept = delete;
+
         void PushByte(Byte val)
         {
             m_StackData[m_Index] = static_cast<int>(val);

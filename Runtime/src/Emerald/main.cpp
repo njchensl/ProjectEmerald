@@ -2,6 +2,8 @@
 #include <fstream>
 #include <vector>
 
+
+#include "Class.h"
 #include "Core.h"
 #include "Disassembler.h"
 #include "PermGenAllocator.h"
@@ -18,6 +20,9 @@ enum class ExecutionMode
 int main(int argc, char** argv)
 {
     using namespace Emerald;
+    {
+        ConstantPoolEntry e = { .Type = 'S', .StringConstant = "java/lang/Object" };
+    }
 #ifndef _DEBUG
     if (argc == 1) {
         std::cout << "No parameters" << std::endl;

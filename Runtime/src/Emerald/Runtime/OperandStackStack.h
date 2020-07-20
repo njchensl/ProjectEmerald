@@ -10,6 +10,14 @@ namespace Emerald
     public:
         OperandStackStack();
 
+        OperandStackStack(const OperandStackStack& other) = delete;
+
+        OperandStackStack(OperandStackStack&& other) noexcept = delete;
+
+        OperandStackStack& operator=(const OperandStackStack& other) = delete;
+
+        OperandStackStack& operator=(OperandStackStack&& other) noexcept = delete;
+
         OperandStack<Size>& GetActive()
         {
             return m_OperandStacks[m_Index];
