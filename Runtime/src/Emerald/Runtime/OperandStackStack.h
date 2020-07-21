@@ -23,8 +23,34 @@ namespace Emerald
             return m_OperandStacks[m_Index];
         }
 
+        typedef OperandStack<Size>* iterator;
+        typedef const OperandStack<Size>* const_iterator;
+
+        iterator begin()
+        {
+            return &m_OperandStacks[0];
+        }
+
+        const_iterator begin() const
+        {
+            return &m_OperandStacks[0];
+        }
+
+        iterator end()
+        {
+            return &m_OperandStacks[m_Index];
+        }
+
+        const_iterator end() const
+        {
+            return &m_OperandStacks[m_Index];
+        }
+
+
         void Push();
         void Pop();
+
+        // enumerator
     private:
         OperandStack<Size> m_OperandStacks[1000];
         int m_Index = 0;

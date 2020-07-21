@@ -20,9 +20,6 @@ enum class ExecutionMode
 int main(int argc, char** argv)
 {
     using namespace Emerald;
-    {
-        ConstantPoolEntry e = { .Type = 'S', .StringConstant = "java/lang/Object" };
-    }
 #ifndef _DEBUG
     if (argc == 1) {
         std::cout << "No parameters" << std::endl;
@@ -51,8 +48,6 @@ int main(int argc, char** argv)
     ExecutionMode mode = ExecutionMode::Interpret;
     std::string filepath = "C:\\Users\\njche\\Desktop\\test.exec";
 #endif
-
-
     //std::cout << filepath << std::endl;
     std::ifstream input(filepath, std::ios::binary);
     std::vector<uint8_t> buffer(std::istreambuf_iterator<char>(input), {});

@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <any>
 
 #include "Core.h"
 
@@ -24,7 +25,7 @@ namespace Emerald
 
     struct ALIGN8 ConstantPoolEntry
     {
-        AChar Type; // char code for primitives, ‘A’ for classes, ‘S’ for strings
+        ConstantPoolEntry(AChar type, std::any data);
 
         ConstantPoolEntry(const ConstantPoolEntry& other) = delete;
 
@@ -50,10 +51,11 @@ namespace Emerald
             }
             }
         }
+        AChar Type; // char code for primitives, ‘A’ for classes, ‘s’ for strings
         union ALIGN8
         {
             String ClassName; // 'A'
-            String StringConstant; // 'S'
+            String StringConstant; // 's'
             // primitive values
             PrimitiveData PrimitiveValue;
         };
