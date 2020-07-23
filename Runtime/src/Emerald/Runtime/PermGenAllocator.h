@@ -12,7 +12,7 @@ namespace Emerald
         static void Init(size_t size);
 
         template <typename T, typename... Args>
-        static T* New(Args ... args)
+        static T* New(Args&& ... args)
         {
             T* ptr = reinterpret_cast<T*>(m_Head);
             size_t size = sizeof(T);
