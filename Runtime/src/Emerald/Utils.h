@@ -5,7 +5,7 @@ namespace Emerald
 {
     // round up util func
     template <typename T, T multiple>
-    __forceinline static T RoundUp(T numToRound) {
+    __forceinline constexpr static T RoundUp(T numToRound) {
         if (multiple == 0) {
             return numToRound;
         }
