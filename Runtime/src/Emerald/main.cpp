@@ -59,7 +59,7 @@ int main(int argc, char** argv)
     case ExecutionMode::Interpret:
     {
         PermGenAllocator::Init(82 * 1024 * 1024);
-        PermGenAllocator::New<VirtualMachine>(code);
+        ClassFileToClassData(code);
         VirtualMachine* vm = new VirtualMachine(code);
         while (vm->Running)
         {

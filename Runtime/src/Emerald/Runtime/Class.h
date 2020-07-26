@@ -1,7 +1,9 @@
 #pragma once
-#include <iostream>
+
+
 #include <vector>
-#include <any>
+#include <variant>
+
 
 #include "Core.h"
 
@@ -31,11 +33,13 @@ namespace Emerald
 
     static_assert(sizeof(PrimitiveData) == 8);
 
+    using ConstantPoolEntryData = std::variant<Byte, Short, Int, Long, Float, Double, Char, Boolean, String>;
+
     struct ALIGN8 ConstantPoolEntry
     {
-        ConstantPoolEntry(AChar type, std::any data);
+        ConstantPoolEntry(AChar type, ConstantPoolEntryData data);
 
-        ConstantPoolEntry(const ConstantPoolEntry& other) : Type(other.Type)
+        ConstantPoolEntry(const ConstantPoolEntry& other) : Type(other.Type), ClassName(String())
         {
             switch (other.Type)
             {
@@ -51,13 +55,14 @@ namespace Emerald
             }
             default:
             {
+                ClassName.~String();
                 memcpy(&PrimitiveValue, &other.PrimitiveValue, sizeof(PrimitiveData));
                 break;
             }
             }
         }
 
-        ConstantPoolEntry(ConstantPoolEntry&& other) noexcept : Type(other.Type)
+        ConstantPoolEntry(ConstantPoolEntry&& other) noexcept : Type(other.Type), ClassName(String())
         {
             switch (other.Type)
             {
@@ -73,6 +78,7 @@ namespace Emerald
             }
             default:
             {
+                ClassName.~String();
                 memcpy(&PrimitiveValue, &other.PrimitiveValue, sizeof(PrimitiveData));
                 break;
             }
@@ -85,7 +91,18 @@ namespace Emerald
             {
                 return *this;
             }
-            switch (other.Type) {
+            if ((Type == 'A' || Type == 's') && other.Type != 'A' && other.Type != 's')
+            {
+                ClassName.~String();
+            }
+            if (Type != 'A' && Type != 's' && (other.Type == 'A' || other.Type == 's'))
+            {
+                String* classNamePtr = &ClassName; // its an invalid object, so well make it valid
+                memset(classNamePtr, 0, sizeof(String));
+                new(classNamePtr) String;
+            }
+            switch (other.Type)
+            {
             case 'A':
             {
                 ClassName = other.ClassName;
@@ -102,16 +119,28 @@ namespace Emerald
                 break;
             }
             }
+            Type = other.Type;
             return *this;
         }
 
-        ConstantPoolEntry& operator=(ConstantPoolEntry&& other)
+        ConstantPoolEntry& operator=(ConstantPoolEntry&& other) noexcept
         {
             if (this == &other)
             {
                 return *this;
             }
-            switch (other.Type) {
+            if ((Type == 'A' || Type == 's') && other.Type != 'A' && other.Type != 's')
+            {
+                ClassName.~String();
+            }
+            if (Type != 'A' && Type != 's' && (other.Type == 'A' || other.Type == 's'))
+            {
+                String* classNamePtr = &ClassName; // its an invalid object, so well make it valid
+                memset(classNamePtr, 0, sizeof(String));
+                new(classNamePtr) String;
+            }
+            switch (other.Type)
+            {
             case 'A':
             {
                 ClassName = std::move(other.ClassName);
@@ -128,6 +157,7 @@ namespace Emerald
                 break;
             }
             }
+            Type = other.Type;
             return *this;
         }
 
@@ -140,7 +170,7 @@ namespace Emerald
                 ClassName.~String();
                 break;
             }
-            case 'S':
+            case 's':
             {
                 StringConstant.~String();
                 break;

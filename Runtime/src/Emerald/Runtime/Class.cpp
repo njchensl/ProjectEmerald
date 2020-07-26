@@ -1,61 +1,71 @@
 #include "Class.h"
+
+#include <variant>
+
 #include "Utils.h"
 
 namespace Emerald
 {
-    ConstantPoolEntry::ConstantPoolEntry(AChar type, std::any data) : Type(type)
+    ConstantPoolEntry::ConstantPoolEntry(AChar type, ConstantPoolEntryData data) : Type(type), ClassName(String())
     {
         switch (type)
         {
         case 'A':
         {
-            ClassName = std::any_cast<String>(data);
+            ClassName = std::get<String>(data);
             break;
         }
         case 's':
         {
-            StringConstant = std::any_cast<String>(data);
+            StringConstant = std::get<String>(data);
             break;
         }
-        case 'B':
+        default:
         {
-            PrimitiveValue.ByteValue = std::any_cast<Byte>(data);
-            break;
-        }
-        case 'S':
-        {
-            PrimitiveValue.ShortValue = std::any_cast<Short>(data);
-            break;
-        }
-        case 'I':
-        {
-            PrimitiveValue.IntValue = std::any_cast<Int>(data);
-            break;
-        }
-        case 'J':
-        {
-            PrimitiveValue.LongValue = std::any_cast<Long>(data);
-            break;
-        }
-        case 'F':
-        {
-            PrimitiveValue.FloatValue = std::any_cast<Float>(data);
-            break;
-        }
-        case 'D':
-        {
-            PrimitiveValue.DoubleValue = std::any_cast<Double>(data);
-            break;
-        }
-        case 'C':
-        {
-            PrimitiveValue.CharValue = std::any_cast<Char>(data);
-            break;
-        }
-        case 'Z':
-        {
-            PrimitiveValue.BooleanValue = std::any_cast<Boolean>(data);
-            break;
+            ClassName.~String(); // deallocate it so that no memory is leaked. If it wasn't deallocated right now, the string object will never get destroyed -> mem leak
+            switch (type)
+            {
+            case 'B':
+            {
+                PrimitiveValue.ByteValue = std::get<Byte>(data);
+                break;
+            }
+            case 'S':
+            {
+                PrimitiveValue.ShortValue = std::get<Short>(data);
+                break;
+            }
+            case 'I':
+            {
+                PrimitiveValue.IntValue = std::get<Int>(data);
+                break;
+            }
+            case 'J':
+            {
+                PrimitiveValue.LongValue = std::get<Long>(data);
+                break;
+            }
+            case 'F':
+            {
+                PrimitiveValue.FloatValue = std::get<Float>(data);
+                break;
+            }
+            case 'D':
+            {
+                PrimitiveValue.DoubleValue = std::get<Double>(data);
+                break;
+            }
+            case 'C':
+            {
+                PrimitiveValue.CharValue = std::get<Char>(data);
+                break;
+            }
+            case 'Z':
+            {
+                PrimitiveValue.BooleanValue = std::get<Boolean>(data);
+                break;
+            }
+            }
         }
         }
     }
@@ -96,16 +106,18 @@ namespace Emerald
         HeadRoundUp(head);
         // constant pool
         const auto numConstants = ptr_copy_cast<Int>(head, sizeof(Int));
+        head += sizeof(Int);
         HeadRoundUp(head);
         // constant pool entries
         for (Int i = 0; i < numConstants; i++)
         {
             AChar type = *reinterpret_cast<AChar*>(head);
             head++;
-            std::any data;
+            ConstantPoolEntryData data;
             switch (type)
             {
-            case 'A': case 's':
+            case 'A':
+            case 's':
             {
                 size_t stringLength = static_cast<size_t>(*head);
                 head++;
@@ -163,8 +175,7 @@ namespace Emerald
                 break;
             }
             }
-            classData.ConstantPool.emplace_back(type, data);
-            HeadRoundUp(head);
+            classData.ConstantPool.emplace_back(ConstantPoolEntry(type, std::move(data)));
         }
 
         //////////////////////////////////
