@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <cstddef>
 #include <string>
+#include "boost/thread.hpp"
 
 namespace Emerald
 {
