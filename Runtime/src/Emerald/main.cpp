@@ -1,12 +1,11 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <exception>
 
-
-#include "Class.h"
+#include "Runtime/Class.h"
 #include "Core.h"
-#include "Disassembler.h"
-#include "PermGenAllocator.h"
+#include "Runtime/PermGenAllocator.h"
 #include "Runtime/Registers.h"
 #include "Runtime/VirtualMachine.h"
 
@@ -22,11 +21,11 @@ int main(int argc, char** argv)
     using namespace Emerald;
 #ifndef _DEBUG
     if (argc == 1) {
-        std::cout << "No parameters" << std::endl;
+        std::cerr << "No parameters" << std::endl;
         return 0x101;
     }
     if (argc < 1) {
-        std::cout << "No parameters" << std::endl;
+        std::cerr << "No parameters" << std::endl;
         return 0x102;
     }
 
@@ -72,11 +71,7 @@ int main(int argc, char** argv)
     }
     case ExecutionMode::Disassembly:
     {
-        Disassembler disassembler(code, buffer.size());
-        for (;;)
-        {
-            disassembler.Execute();
-        }
+        throw std::runtime_error("");
         return 0;
     }
     case ExecutionMode::None:

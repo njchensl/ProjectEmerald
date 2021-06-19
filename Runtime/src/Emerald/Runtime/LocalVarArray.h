@@ -1,9 +1,9 @@
 #pragma once
 #include <exception>
 
-#include "Core.h"
+#include "../Core.h"
 #include "Type.h"
-#include "Utils.h"
+#include "../Utils.h"
 
 namespace Emerald
 {

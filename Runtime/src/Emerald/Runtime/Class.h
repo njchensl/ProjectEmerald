@@ -5,7 +5,7 @@
 #include <variant>
 
 
-#include "Core.h"
+#include "../Core.h"
 
 namespace Emerald
 {

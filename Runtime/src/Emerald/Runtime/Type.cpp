@@ -2,7 +2,7 @@
 
 namespace Emerald
 {
-    Type::Type() : m_Primitive(true), m_Class(nullptr), m_TypeCode('\0')
+    Type::Type() : m_Primitive(true), m_Class(nullptr)
     {
     }
 
@@ -10,7 +10,7 @@ namespace Emerald
     {
     }
 
-    Type::Type(char typecode) : m_Primitive(true), m_Class(nullptr), m_TypeCode(typecode)
+    Type::Type(char typecode) : m_Primitive(true), m_Class(nullptr)
     {
     }
 

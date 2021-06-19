@@ -5,7 +5,7 @@
 
 #include "LocalVarArray.h"
 #include "Type.h"
-#include "Utils.h"
+#include "../Utils.h"
 #include "../Core.h"
 
 namespace Emerald

@@ -5,7 +5,7 @@ namespace Emerald
 {
     // round up util func
     template <typename T, T multiple>
-    __forceinline constexpr static T RoundUp(T numToRound)
+    inline constexpr static T RoundUp(T numToRound)
     {
         if (multiple == 0)
         {
@@ -56,7 +56,7 @@ namespace Emerald
     };
 
     template <typename R, typename T>
-    __forceinline R copy_cast(const T& t)
+    inline R copy_cast(const T& t)
     {
         R r;
         memcpy(&r, &t, sizeof(T));
@@ -64,7 +64,7 @@ namespace Emerald
     }
 
     template <typename R>
-    __forceinline R ptr_copy_cast(const void* src, size_t size)
+    inline R ptr_copy_cast(const void* src, size_t size)
     {
         R r;
         memcpy(&r, src, size);

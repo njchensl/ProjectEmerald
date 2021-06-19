@@ -2,7 +2,6 @@
 #include <cstdint>
 #include <cstddef>
 #include <string>
-#include <Windows.h>
 
 namespace Emerald
 {
@@ -37,7 +36,6 @@ namespace Emerald
     typedef char AChar;
 
     static_assert(sizeof(OBJHANDLE) == 4);
-    static_assert(sizeof(Char) == 2);
     static_assert(sizeof(AChar) == 1);
     static_assert(sizeof(Byte) == 1);
     static_assert(sizeof(void*) == 8); // 64-bit sicherstellen
