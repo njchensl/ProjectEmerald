@@ -1,10 +1,13 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <exception>
 
+#include "Runtime/Class.h"
 #include "Core.h"
-#include "Disassembler.h"
-#include "VirtualMachine.h"
+#include "Runtime/PermGenAllocator.h"
+#include "Runtime/Registers.h"
+#include "Runtime/VirtualMachine.h"
 
 enum class ExecutionMode
 {
@@ -16,70 +19,63 @@ enum class ExecutionMode
 int main(int argc, char** argv)
 {
     using namespace Emerald;
-
-    EM_CORE_ASSERT(argc >= 2, "Argument count must be greater than or equal to 2!");
-    if (argc == 1)
-    {
-        std::cout << "No parameters" << std::endl;
+#ifndef _DEBUG
+    if (argc == 1) {
+        std::cerr << "No parameters" << std::endl;
         return 0x101;
     }
-    if (argc < 1)
-    {
-        std::cout << "No parameters" << std::endl;
+    if (argc < 1) {
+        std::cerr << "No parameters" << std::endl;
         return 0x102;
     }
 
     ExecutionMode mode = ExecutionMode::Interpret;
 
     std::string filepath;
-    for (int i = 1; i < argc; ++i)
-    {
+    for (int i = 1; i < argc; ++i) {
         std::string param = argv[i];
-        if (param == "-d")
-        {
+        if (param == "-d") {
             // disassembly mode
             mode = ExecutionMode::Disassembly;
         }
-        else
-        {
+        else {
             filepath = param;
             break;
         }
     }
-
-    EM_CORE_ASSERT(mode != ExecutionMode::None, "Invalid execution mode!");
-
+#else
+    ExecutionMode mode = ExecutionMode::Interpret;
+    std::string filepath = "C:\\Users\\njche\\Desktop\\test.exec";
+#endif
     //std::cout << filepath << std::endl;
     std::ifstream input(filepath, std::ios::binary);
-    std::vector<unsigned char> buffer(std::istreambuf_iterator<char>(input), {});
+    std::vector<uint8_t> buffer(std::istreambuf_iterator<char>(input), {});
     //unsigned long long length = buffer.size();
-    unsigned char* code = &buffer[0];
+    Byte* code = (Byte*)buffer.data();
 
     switch (mode)
     {
     case ExecutionMode::Interpret:
     {
-        VirtualMachine vm(code);
-
-        for (;;)
+        PermGenAllocator::Init(82 * 1024 * 1024);
+        ClassFileToClassData(code);
+        VirtualMachine* vm = new VirtualMachine(code);
+        while (vm->Running)
         {
-            vm.Execute();
+            vm->Execute();
         }
 
-        return 1;
+        delete vm;
+        PermGenAllocator::Shutdown();
+        return 0;
     }
     case ExecutionMode::Disassembly:
     {
-        Disassembler disassembler(code, buffer.size());
-        for (;;)
-        {
-            disassembler.Execute();
-        }
-        return 1;
+        throw std::runtime_error("");
+        return 0;
     }
     case ExecutionMode::None:
     {
-        EM_CORE_ASSERT(false, "Invalid execution path!");
     }
     }
 }
